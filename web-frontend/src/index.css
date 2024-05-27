@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.montserrat-font {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+  
+
+.menuitem:hover div  {
+    background-color: #38bdf8;
+}
+
+.menuitem:hover p {
+    color: #38bdf8;
+}
+
+.discussion-modal {
+    position: relative;
+    overflow-y: scroll;
+    width: 60%;
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 1s ease-in-out;
+    transform: translateY(-50%);
+    top: 50%;
+  }
+  
+  .discussion-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .discussion-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .discussion-modal-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .discussion-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .discussion-modal-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ck-editor__editable_inline {
+    max-height: 100px;
+    overflow-y: scroll;
+  }
+

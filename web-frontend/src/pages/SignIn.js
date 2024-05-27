@@ -1,0 +1,155 @@
+import React, { useState, useContext, useEffect } from 'react';
+import { Link , useNavigate } from "react-router-dom";
+import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
+import axios from 'axios';
+import { AppContext } from '../context/AppContext';
+import { setUser } from '../context/actions';
+
+const SignIn = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  const [data, setData] = useState({
+    email: "",
+    password: ""
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: ""
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const { dispatch } = useContext(AppContext);
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('rememberedEmail');
+    if (storedEmail) {
+      setData(prevData => ({ ...prevData, email: storedEmail }));
+    }
+  }, []);
+
+  const handleChange = (key, e) => {
+    setData({ ...data, [key]: e.target.value });
+    setErrors({ ...errors, [key]: "" });
+  };
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const emailError = validateEmail(data.email);
+    const passwordError = validatePassword(data.password);
+
+    if (emailError || passwordError) {
+      setErrors({
+        email: emailError,
+        password: passwordError
+      });
+      setLoading(false);
+      return;
+    } else {
+      try {
+        const response = await axios.post('http://localhost:8000/api/login', {
+          email: data.email,
+          password: data.password
+        });
+    
+        setUser(dispatch, response.data.user);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('admin', response.data.user.is_admin);
+        localStorage.setItem('user_id', response.data.user.id);
+        
+        if (data.remember) {
+          localStorage.setItem('rememberedEmail', data.email);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+        }
+
+        navigate('/');
+      } catch (error) {
+        setErrors({...errors , password: error.response.data.message});
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return "Email is required.";
+    if (!emailRegex.test(email)) return "Invalid email address.";
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return "Password is required.";
+    if (password.length < 8) return "Password must be at least 8 characters.";
+    return "";
+  };
+
+  const rememberUser = (e) => {
+    setData({ ...data, remember: e.target.checked });
+  };
+
+  return (
+    <div className="w-screen mx-auto min-h-screen flex items-center justify-center">
+      <div className="w-1/3 shadow-md">
+        <div className="bg-gray-200 py-5 rounded-t border">
+          <h2 className="text-center mb-5 font-semibold text-3xl montserrat-font text-black">Log In</h2>
+          <p className="text-center text-black font-semibold">
+            Don't have an account? <Link className="text-blue-500 font-semibold" to="/register">Sign Up</Link>
+          </p>
+        </div>
+        <div className="rounded-b border py-[4rem]">
+          <form onSubmit={handleSignIn}>
+            <div className="px-[1.5rem] py-[1rem]">
+              <Input
+                placeholder="Email Address"
+                id="email"
+                label="Email"
+                text={data.email}
+                handleChange={(e) => handleChange('email', e)}
+              />
+              {errors.email && <p className="text-red-500 mt-2">{errors.email}</p>}
+            </div>
+            <div className="px-[1.5rem] py-[1rem]">
+              <Input
+                placeholder="Password"
+                id="password"
+                label="Password"
+                type="password"
+                text={data.password}
+                handleChange={(e) => handleChange('password', e)}
+              />
+              {errors.password && <p className="text-red-500 mt-2">{errors.password}</p>}
+            </div>
+            <div className="flex items-center justify-between px-[1.5rem] py-[1rem]">
+              <Input
+                text=""
+                Style="flex items-center w-[200px]"
+                id="checkbox"
+                order={"order-2 ml-[8px]"}
+                type="checkbox"
+                label="Remember me"
+                handleChange={rememberUser}
+              />
+            </div>
+            <Button handlePress={handleSignIn} color="bg-blue-400" container="w-full py-[1rem] px-[1.5rem]">
+              {loading ? 'Signing In...' : 'Sign In'}
+            </Button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SignIn;
