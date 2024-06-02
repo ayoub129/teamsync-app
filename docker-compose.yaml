@@ -7,7 +7,6 @@ services:
       target: php
       args:
         - APP_ENV=${APP_ENV}
-    image: ayoubberouijil/nanachat-backend:latest
     environment:
       - APP_ENV=${APP_ENV}
       - CONTAINER_ROLE=app
@@ -59,7 +58,6 @@ services:
     build:
       context: ./web-frontend
       dockerfile: Dockerfile
-    image: ayoubberouijil/nanachat-frontend:latest
     container_name: react-app
     ports:
       - "3000:3000"
