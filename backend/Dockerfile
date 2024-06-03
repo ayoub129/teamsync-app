@@ -15,7 +15,9 @@ RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
 COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
 
 # Set the entry point for the container
-ENTRYPOINT [ "Docker/entrypoint.sh" ]
+COPY Docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # Expose the port for Apache
 EXPOSE 8000
