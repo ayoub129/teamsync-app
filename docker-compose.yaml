@@ -34,7 +34,7 @@ services:
 
   openldap:
     image: osixia/openldap:latest
-    container_name: openldap
+    container_name: ldap
     environment:
       - LDAP_ORGANISATION=teamsync
       - LDAP_DOMAIN=teamsync.com
