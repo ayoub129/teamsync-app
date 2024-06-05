@@ -27,7 +27,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install
+# RUN composer install
 
 # Copy entrypoint script and set permissions
 COPY Docker/entrypoint.sh /usr/local/bin/entrypoint.sh
