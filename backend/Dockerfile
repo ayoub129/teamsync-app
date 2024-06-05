@@ -38,3 +38,4 @@ ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # Expose the port for Apache
 EXPOSE 8000
+
