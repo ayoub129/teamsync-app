@@ -6,7 +6,12 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install
+
+COPY Docker/entrypointfront.sh /usr/local/bin/entrypointfront.sh
+
+RUN chmod +x /usr/local/bin/entrypointfront.sh
+
+ENTRYPOINT [ "/usr/local/bin/entrypointfront.sh" ]
 
 COPY . .
 
