@@ -15,7 +15,7 @@ RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
     && docker-php-ext-install pdo pdo_mysql
 
 # Install Composer
-COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
+# COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
@@ -24,7 +24,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install
+# RUN composer install
 
 # Set the entry point for the container
 ENTRYPOINT [ "Docker/entrypoint.sh" ]
