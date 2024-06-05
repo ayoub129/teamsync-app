@@ -27,7 +27,12 @@ COPY . .
 # RUN composer install
 
 # Set the entry point for the container
-ENTRYPOINT [ "Docker/entrypoint.sh" ]
+# Copy entrypoint script and set permissions
+COPY Docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Set the entry point for the container
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # Expose the port for Apache
 EXPOSE 8000
