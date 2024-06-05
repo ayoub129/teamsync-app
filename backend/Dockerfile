@@ -26,9 +26,6 @@ WORKDIR /var/www
 # Copy application files
 COPY . .
 
-# Install PHP dependencies
-# RUN composer install
-
 # Copy entrypoint script and set permissions
 COPY Docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
@@ -38,4 +35,3 @@ ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # Expose the port for Apache
 EXPOSE 8000
-
