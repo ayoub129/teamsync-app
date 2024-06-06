@@ -60,12 +60,9 @@ services:
     build:
       context: ./web-frontend
       dockerfile: Dockerfile
-    container_name: react-app
+    container_name: frontend
     ports:
-      - "3000:3000"
-    volumes:
-      - ./web-frontend:/usr/src/app
-    command: npm start
+      - "80:80"
     depends_on:
       - php
 
