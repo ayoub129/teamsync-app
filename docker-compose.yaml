@@ -60,7 +60,7 @@ services:
     build:
       context: ./web-frontend
       dockerfile: Dockerfile
-    container_name: frontend
+    container_name: react-app
     ports:
       - "80:80"
     depends_on:
