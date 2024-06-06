@@ -25,7 +25,6 @@ WORKDIR /var/www
 
 # Copy application files, excluding unnecessary files
 COPY . /var/www
-RUN composer dump-autoload --optimize
 
 # Copy entrypoint script and set permissions
 COPY Docker/entrypoint.sh /usr/local/bin/entrypoint.sh
