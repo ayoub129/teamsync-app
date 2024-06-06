@@ -13,16 +13,16 @@ RUN npm run build
 FROM nginx:alpine
 
 # Create a non-root user and group
-RUN addgroup -S mygroup && adduser -S myuser -G mygroup
+RUN addgroup -S ayoubg && adduser -S ayoub -G ayoubg
 
 # Copy build files to nginx html directory
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
 # Change permissions to the non-root user
-RUN chown -R myuser:mygroup /usr/share/nginx/html
+RUN chown -R ayoub:ayoubg /usr/share/nginx/html
 
 # Switch to non-root user
-USER myuser
+USER ayoub
 
 EXPOSE 80
 
