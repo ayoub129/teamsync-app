@@ -23,10 +23,6 @@ RUN curl -L https://getcomposer.org/installer -o composer-setup.php \
 # Set working directory
 WORKDIR /var/www
 
-# Copy Composer files and install dependencies
-COPY composer.json composer.lock /var/www/
-RUN composer install --no-scripts --no-autoloader
-
 # Copy application files, excluding unnecessary files
 COPY . /var/www
 RUN composer dump-autoload --optimize
