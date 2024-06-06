@@ -24,7 +24,7 @@ RUN curl -L https://getcomposer.org/installer -o composer-setup.php \
 WORKDIR /var/www
 
 # Copy application files
-COPY . .
+COPY . /var/www
 
 # Copy entrypoint script and set permissions
 COPY Docker/entrypoint.sh /usr/local/bin/entrypoint.sh
