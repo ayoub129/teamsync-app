@@ -157,9 +157,9 @@ const SignUp = () => {
             </div>
             <div className="px-[1.5rem] py-[1rem]">
               <Input
-                placeholder="CN"
+                placeholder="Email"
                 id="cn"
-                label="CN"
+                label="Email"
                 text={data.email}
                 handleChange={(e) => handleChange('email', e)}
               />
