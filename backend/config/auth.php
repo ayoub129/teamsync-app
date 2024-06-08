@@ -62,7 +62,13 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
+        ],
+
+        'ldap' => [
+            'driver' => 'ldap',
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
+            'rules' => [],
         ],
     ],
 
