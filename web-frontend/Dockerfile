@@ -9,21 +9,16 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve the build using nginx
-FROM nginx:alpine
+# Stage 2: Serve the build using a simple Node server
+FROM node:16-alpine
 
-# Create a non-root user and group
-RUN addgroup -S ayoubg && adduser -S ayoub -G ayoubg
+WORKDIR /usr/src/app
 
-# Copy build files to nginx html directory
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
+COPY --from=build /usr/src/app/build ./build
 
-# Change permissions to the non-root user
-RUN chown -R ayoub:ayoubg /usr/share/nginx/html
-
-# Switch to non-root user
-USER ayoub
+# Install serve to serve the build files
+RUN npm install -g serve
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "build", "-l", "80"]
