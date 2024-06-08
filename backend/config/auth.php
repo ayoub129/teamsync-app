@@ -17,12 +17,23 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'ldap' => [
+            'driver' => 'session',
+            'provider' => 'ldap',
+        ],
     ],
 
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'ldap' => [
+            'driver' => 'ldap',
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
+            'rules' => [],
         ],
     ],
 
