@@ -1,0 +1,92 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk17'
+        nodejs 'node'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonarqube'
+    }
+
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'master', url: 'https://github.com/ayoub129/teamsync-app.git'
+            }
+        }
+
+        stage('Sonarqube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-server') {
+                    sh """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectName=Teamsync \
+                        -Dsonar.projectKey=Teamsync \
+                        -X
+                    """
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
+                }
+            }
+        }
+
+        stage('Trivy FS Scan') {
+            steps {
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+
+        stage('Build and Push Images') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: "dockerhub", url: 'https://index.docker.io/v1/') {
+                        sh 'docker-compose -f docker-compose.yaml build php react'
+                        sh 'docker push ayoubberouijil/nanachat-backend:latest'
+                        sh 'docker push ayoubberouijil/nanachat-frontend:latest'
+                    }
+                }
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                sh "trivy image ayoubberouijil/nanachat-backend:latest > trivy-php.txt"
+                sh "trivy image ayoubberouijil/nanachat-frontend:latest > trivy-react.txt"
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sshagent(['SSH']) {
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no ec2-user@35.175.102.49 \
+                            'sudo docker pull ayoubberouijil/nanachat-backend:latest && \
+                             sudo docker pull ayoubberouijil/nanachat-frontend:latest && \
+                             if [ -f /var/lib/jenkins/workspace/Nanachat-CICD/docker-compose.yaml ]; then \
+                                 sudo docker-compose -f /var/lib/jenkins/workspace/Nanachat-CICD/docker-compose.yaml up -d  \
+                             else \
+                                 echo "docker-compose.yaml file not found at /var/lib/jenkins/workspace/Nanachat-CICD/"; \
+                                 exit 1; \
+                             fi'
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
