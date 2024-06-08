@@ -205,7 +205,7 @@ class AuthController extends Controller
             } else {
                 return response()->json(['message' => 'Invalid credentials'], 401);
             }
-        } catch (\Exception e) {
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Login failed', 'error' => $e->getMessage()], 500);
         }
     }
@@ -217,7 +217,7 @@ class AuthController extends Controller
             $users = LdapUser::all();
 
             return response()->json(['ldap_users' => $users], 200);
-        } catch (\Exception e) {
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve LDAP records', 'error' => $e->getMessage()], 500);
         }
     }
