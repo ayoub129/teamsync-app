@@ -4,7 +4,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import axios from '../axios';
 import { AppContext } from '../context/AppContext';
-import { setUser } from '../context/Actions';
+import { setUser } from '../context/actions';
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
