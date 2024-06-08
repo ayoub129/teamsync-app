@@ -29,7 +29,7 @@ return [
     'connections' => [
 
         'default' => [
-            'hosts' => [env('LDAP_HOST', '54.237.39.217')],
+            'hosts' => [env('LDAP_HOST', '')],
             'username' => env('LDAP_USERNAME', 'cn=admin,dc=teamsync,dc=com'),
             'password' => env('LDAP_PASSWORD', 'ro-pass'),
             'port' => 389,
