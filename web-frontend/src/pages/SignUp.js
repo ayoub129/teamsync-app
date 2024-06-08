@@ -4,7 +4,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import axios from '../axios';
 import { AppContext } from '../context/AppContext';
-import { setUser } from '../context/actions'
+import { setUser } from '../context/Actions';
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -129,7 +129,7 @@ const SignUp = () => {
   const accept = (e) => {
     setData({ ...data, accept: e.target.checked });
     setErrors({ ...errors, accept: "" });
-  }
+  };
 
 return (
   <div className="w-full max-w-lg mx-auto min-h-screen flex items-center justify-center overflow-x-hidden my-12">
