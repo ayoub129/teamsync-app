@@ -97,7 +97,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
-            'file' => 'sometimes|file|mimes:jpeg,png,jpg,gif,svg',
+            'file' => 'sometimes|file|mimes:jpeg,png,jpg,gif,svg|max:5120'
             'friends' => 'array',
         ]);
 
