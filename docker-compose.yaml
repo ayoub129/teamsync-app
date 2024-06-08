@@ -19,6 +19,7 @@ services:
     depends_on:
       - mysqldb
       - openldap
+    command: sh -c "wait-for-it mysqldb:3306 -- php artisan serve --host=0.0.0.0 --port=8000"
 
   mysqldb:
     image: mariadb
