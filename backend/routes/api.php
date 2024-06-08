@@ -131,9 +131,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     /* Routes for users */
-    // forget passwords 
-    Route::post('/forgot-password', [AuthController::class , 'forgot']);
-
+    Route::get('/ldap-records', [AuthController::class, 'getLdapRecords']);
+    
     // update password
     Route::post('/reset-password',  [AuthController::class , 'updatePassword']);
 
