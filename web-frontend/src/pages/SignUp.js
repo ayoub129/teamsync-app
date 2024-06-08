@@ -132,7 +132,7 @@ const SignUp = () => {
   };
 
 return (
-  <div className="w-full max-w-lg mx-auto min-h-screen flex items-center justify-center overflow-x-hidden my-12">
+  <div className="w-[90%] max-w-lg mx-auto min-h-screen flex items-center justify-center overflow-x-hidden my-12">
     <div className="w-full shadow-md">
       <div className="bg-gray-200 py-5 rounded-t border">
         <h2 className="text-center mb-5 font-semibold text-3xl montserrat-font text-black">Register</h2>
