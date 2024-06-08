@@ -27,20 +27,20 @@ return [
     */
 
     'connections' => [
-        'default' => [
-            'hosts' => [env('LDAP_HOST', 'ldap')], 
-            'username' => env('LDAP_USERNAME', 'cn=admin,dc=teamsync,dc=com'),
-            'password' => env('LDAP_PASSWORD', 'admin_pass'),
-            'port' => env('LDAP_PORT', 389),
-            'base_dn' => env('LDAP_BASE_DN', 'dc=teamsync,dc=com'),
-            'timeout' => env('LDAP_TIMEOUT', 5),
-            'use_ssl' => env('LDAP_SSL', false),
-            'use_tls' => env('LDAP_TLS', false),
-            'use_sasl' => env('LDAP_SASL', false),
-            'sasl_options' => [],
 
+        'default' => [
+            'hosts' => [env('LDAP_HOST', '54.237.39.217')],
+            'username' => env('LDAP_USERNAME', 'cn=admin,dc=teamsync,dc=com'),
+            'password' => env('LDAP_PASSWORD', 'ro-pass'),
+            'port' => 389,
+            'base_dn' => env('LDAP_BASE_DN', 'dc=teamsync,dc=com'),
+            'timeout' => 5,
+            'use_ssl' => false,
+            'use_tls' => false,
         ],
+
     ],
+
     
 
     /*
