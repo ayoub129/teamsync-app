@@ -157,10 +157,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/pusher/send', [PusherController::class, 'send']);
 
-    Route::post('/messages', [MessageController::class, 'sendMessage']);
-    
-    Route::get('/messages/{receiverId}', [MessageController::class, 'getMessages']);
-
     Broadcast::channel('chat.{receiver_id}', function ($user, $receiver_id) {
         return (int) $user->id === (int) $receiver_id || User::whereHas('friends', function($query) use ($user, $receiver_id) {
             $query->where('friends.user_id', $user->id)
