@@ -18,7 +18,7 @@ class Channel extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'channel_users')->withTimestamps();
+        return $this->belongsToMany(Users::class, 'channel_users')->withTimestamps();
     }
 
     public function groups()
