@@ -5,17 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use LdapRecord\Models\ActiveDirectory\User as LdapUser;
-use LdapRecord\Container;
-use LdapRecord\Laravel\Auth\ListensForLdapBindFailure;
-use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 use App\Models\User;
 use App\Models\File;
 
 class AuthController extends Controller
 {
-    use AuthenticatesWithLdap, ListensForLdapBindFailure;
-
     // Update Password Route
     public function updatePassword(Request $request)
     {
@@ -34,21 +28,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        // Update the user's password in LDAP
-        try {
-            $ldapUser = LdapUser::where('mail', '=', $user->email)->firstOrFail();
-            $ldapUser->unicodePwd = $this->encodePassword($request->password);
-            $ldapUser->save();
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to update LDAP password', 'error' => $e->getMessage()], 500);
-        }
-
         return response()->json(['message' => 'Password updated successfully'], 200);
-    }
-
-    private function encodePassword($password)
-    {
-        return iconv('UTF-8', 'UTF-16LE', '"' . $password . '"');
     }
 
     // Register a new user
@@ -66,22 +46,6 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
-
-        // Create user in LDAP directory
-        try {
-            $ldapUser = (new LdapUser())->inside('ou=Users,dc=teamsync,dc=com');
-            $ldapUser->cn = $request->input('name');
-            $ldapUser->givenName = $request->input('name'); // Given name
-            $ldapUser->sn = $request->input('name'); // Surname
-            $ldapUser->mail = $request->input('email');
-            $ldapUser->unicodePwd = $this->encodePassword($request->input('password'));
-            $ldapUser->objectClass = ['inetOrgPerson', 'top']; // Specify object classes
-            $ldapUser->save();
-        } catch (\Exception $e) {
-            // Rollback local user creation if LDAP user creation fails
-            $user->delete();
-            return response()->json(['message' => 'Failed to create LDAP user', 'error' => $e->getMessage()], 500);
-        }
 
         // Generate authentication token
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -101,8 +65,6 @@ class AuthController extends Controller
             'friends' => 'array',
         ]);
 
-        $oldEmail = $user->email;
-
         if ($request->has('name')) {
             $user->name = $request->input('name');
         }
@@ -112,25 +74,6 @@ class AuthController extends Controller
         }
 
         $user->save();
-
-        // Update user in LDAP
-        try {
-            $ldapUser = LdapUser::where('mail', '=', $oldEmail)->firstOrFail();
-
-            if ($request->has('name')) {
-                $ldapUser->cn = $request->input('name');
-                $ldapUser->givenName = $request->input('name'); // Given name
-                $ldapUser->sn = $request->input('name'); // Surname
-            }
-
-            if ($request->has('email')) {
-                $ldapUser->mail = $request->input('email');
-            }
-
-            $ldapUser->save();
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to update LDAP user', 'error' => $e->getMessage()], 500);
-        }
 
         if ($request->has('friends')) {
             $user->users()->sync($request->input('friends'));
@@ -181,7 +124,7 @@ class AuthController extends Controller
         return response()->json(['user' => $user], 200);
     }
 
-    // Login a user with LDAP authentication
+    // Login a user
     public function login(Request $request)
     {
         $request->validate([
@@ -189,36 +132,13 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        try {
-            if ($this->attemptLogin($request)) {
-                $ldapUser = LdapUser::where('mail', '=', $request->email)->firstOrFail();
-                $user = User::firstOrCreate(
-                    ['email' => $ldapUser->mail[0]],
-                    ['name' => $ldapUser->cn[0], 'password' => Hash::make($request->password)]
-                );
-
-                Auth::login($user);
-
-                $token = $user->createToken('AuthToken')->plainTextToken;
-
-                return response()->json(['user' => $user, 'token' => $token], 200);
-            } else {
-                return response()->json(['message' => 'Invalid credentials'], 401);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Login failed', 'error' => $e->getMessage()], 500);
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
-    }
 
-    // Get LDAP records
-    public function getLdapRecords()
-    {
-        try {
-            $users = LdapUser::all();
+        $user = Auth::user();
+        $token = $user->createToken('AuthToken')->plainTextToken;
 
-            return response()->json(['ldap_users' => $users], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve LDAP records', 'error' => $e->getMessage()], 500);
-        }
+        return response()->json(['user' => $user, 'token' => $token], 200);
     }
 }
