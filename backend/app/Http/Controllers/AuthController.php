@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Users;
 use App\Models\File;
 
 class AuthController extends Controller
@@ -41,7 +41,7 @@ class AuthController extends Controller
         ]);
 
         // Create user in local database
-        $user = User::create([
+        $user = Users::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
@@ -56,7 +56,7 @@ class AuthController extends Controller
     // Update user details
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = Users::findOrFail($id);
 
         $request->validate([
             'name' => 'sometimes|string|max:255',
@@ -100,7 +100,7 @@ class AuthController extends Controller
     // Get user image
     public function getUserImage($id)
     {
-        $user = User::findOrFail($id);
+        $user = Users::findOrFail($id);
 
         if ($user->files()->exists()) {
             $file = $user->files()->latest()->first();
@@ -115,7 +115,7 @@ class AuthController extends Controller
     // Get a specific user
     public function show($id)
     {
-        $user = User::withCount(['channels', 'groups', 'friends', 'discussions'])->findOrFail($id);
+        $user = Users::withCount(['channels', 'groups', 'friends', 'discussions'])->findOrFail($id);
 
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
