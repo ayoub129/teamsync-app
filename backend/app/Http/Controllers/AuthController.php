@@ -61,7 +61,7 @@ class AuthController extends Controller
         ]);
 
         // Create user in local database
-        $user = User::create([
+        $user = \App\Models\User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
