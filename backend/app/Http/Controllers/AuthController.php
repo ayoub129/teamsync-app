@@ -190,7 +190,7 @@ class AuthController extends Controller
         ]);
 
         try {
-            if ($this->attemptLdapLogin($request)) {
+            if ($this->attemptLogin($request)) {
                 $ldapUser = LdapUser::where('mail', '=', $request->email)->firstOrFail();
                 $user = User::firstOrCreate(
                     ['email' => $ldapUser->mail[0]],
