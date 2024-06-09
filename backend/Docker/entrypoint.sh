@@ -20,4 +20,5 @@ php artisan storage:link
 chmod -R 775 storage
 chown -R www-data:www-data storage
 php artisan serve --port=$PORT --host=0.0.0.0 --env=.env
+composer dump-autoload
 exec docker-php-entrypoint "$@"
