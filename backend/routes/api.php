@@ -130,9 +130,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
 
 
-    /* Routes for users */
-    Route::get('/ldap-records', [AuthController::class, 'getLdapRecords']);
-    
     // update password
     Route::post('/reset-password',  [AuthController::class , 'updatePassword']);
 
