@@ -1,24 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import axios from 'axios';
+import axios from '../axios'; // Using the axios instance you configured
 import { AppContext } from '../context/AppContext';
 import { setUser } from '../context/actions';
 
 const SignIn = () => {
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate("/");
-    }
-  }, [navigate]);
+  const navigate = useNavigate();
+  const { dispatch } = useContext(AppContext);
 
   const [data, setData] = useState({
     email: "",
-    password: ""
+    password: "",
+    remember: false
   });
 
   const [errors, setErrors] = useState({
@@ -28,7 +23,12 @@ const SignIn = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const { dispatch } = useContext(AppContext);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('rememberedEmail');
@@ -57,16 +57,16 @@ const SignIn = () => {
       return;
     } else {
       try {
-        const response = await axios.post('http://localhost:8000/api/login', {
+        const response = await axios.post('/login', {
           email: data.email,
           password: data.password
         });
-    
+
         setUser(dispatch, response.data.user);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('admin', response.data.user.is_admin);
         localStorage.setItem('user_id', response.data.user.id);
-        
+
         if (data.remember) {
           localStorage.setItem('rememberedEmail', data.email);
         } else {
@@ -75,7 +75,7 @@ const SignIn = () => {
 
         navigate('/');
       } catch (error) {
-        setErrors({...errors , password: error.response.data.message});
+        setErrors({ ...errors, password: error.response.data.message });
       } finally {
         setLoading(false);
       }
@@ -100,27 +100,27 @@ const SignIn = () => {
   };
 
   return (
-    <div className="w-screen mx-auto min-h-screen flex items-center justify-center">
-      <div className="w-1/3 shadow-md">
+    <div className="w-screen mx-auto min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-md shadow-md">
         <div className="bg-gray-200 py-5 rounded-t border">
           <h2 className="text-center mb-5 font-semibold text-3xl montserrat-font text-black">Log In</h2>
           <p className="text-center text-black font-semibold">
             Don't have an account? <Link className="text-blue-500 font-semibold" to="/register">Sign Up</Link>
           </p>
         </div>
-        <div className="rounded-b border py-[4rem]">
+        <div className="rounded-b border py-8 px-4 sm:px-6 lg:px-8">
           <form onSubmit={handleSignIn}>
-            <div className="px-[1.5rem] py-[1rem]">
+            <div className="mb-4">
               <Input
-                placeholder="CN"
-                id="cn"
-                label="CN"
+                placeholder="Email"
+                id="email"
+                label="Email"
                 text={data.email}
                 handleChange={(e) => handleChange('email', e)}
               />
               {errors.email && <p className="text-red-500 mt-2">{errors.email}</p>}
             </div>
-            <div className="px-[1.5rem] py-[1rem]">
+            <div className="mb-4">
               <Input
                 placeholder="Password"
                 id="password"
@@ -131,18 +131,18 @@ const SignIn = () => {
               />
               {errors.password && <p className="text-red-500 mt-2">{errors.password}</p>}
             </div>
-            <div className="flex items-center justify-between px-[1.5rem] py-[1rem]">
+            <div className="flex items-center mb-4">
               <Input
                 text=""
-                Style="flex items-center w-[200px]"
+                Style="flex items-center"
                 id="checkbox"
-                order={"order-2 ml-[8px]"}
+                order="order-2 ml-2"
                 type="checkbox"
                 label="Remember me"
                 handleChange={rememberUser}
               />
             </div>
-            <Button handlePress={handleSignIn} color="bg-blue-400" container="w-full py-[1rem] px-[1.5rem]">
+            <Button handlePress={handleSignIn} color="bg-blue-400" container="w-full py-3">
               {loading ? 'Signing In...' : 'Sign In'}
             </Button>
           </form>
