@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     
     /* Routes for groups */ 
     // Get all Groups 
@@ -159,7 +159,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
         })->exists();
     });
             
-// });
+});
 
 // Routes for authentication
 Route::post('/register', [AuthController::class , 'register']);
