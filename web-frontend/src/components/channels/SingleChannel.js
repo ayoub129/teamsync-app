@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
+import axios from '../../axios'; 
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '../ui/Button';
-import Filters from '../ui/Filters'; 
+import Filters from '../ui/Filters';
 import parse from 'html-react-parser';
 import ChannelMembers from './ChannelMembers';
 import Loader from '../ui/Loader';
-import ConfirmationModal from '../ui/ConfirmationModal'; // Import the modal component
+import ConfirmationModal from '../ui/ConfirmationModal';
 import Toast, { useCustomToast } from '../ui/CustomToast';
 
 const SingleChannel = () => {
@@ -17,10 +17,10 @@ const SingleChannel = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showModal, setShowModal] = useState(false); // State to handle modal visibility
-  const [deleting, setDeleting] = useState(false); // State to handle deletion loading
-  const [joining, setJoining] = useState(false); // State to handle joining loading
-  const [leaving, setLeaving] = useState(false); // State to handle leaving loading
+  const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [joining, setJoining] = useState(false);
+  const [leaving, setLeaving] = useState(false);
   const userId = localStorage.getItem('user_id');
   const { toasts, showToast } = useCustomToast();
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const SingleChannel = () => {
     const fetchChannel = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/channels/${id}`, {
+        const response = await axios.get(`/channels/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -49,7 +49,7 @@ const SingleChannel = () => {
     const fetchMembers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/channels/${id}/members`, {
+        const response = await axios.get(`/channels/${id}/members`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -68,7 +68,7 @@ const SingleChannel = () => {
   const fetchDiscussions = useCallback(async (filter = null, search = null) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/channels/${id}/discussions`, {
+      const response = await axios.get(`/channels/${id}/discussions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
@@ -187,13 +187,13 @@ const SingleChannel = () => {
   const join = async () => {
     setJoining(true);
     try {
-      await axios.post(`http://localhost:8000/api/channels/${id}/join`, {}, {
+      await axios.post(`/channels/${id}/join`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
       // Fetch members again to update the list
-      const response = await axios.get(`http://localhost:8000/api/channels/${id}/members`, {
+      const response = await axios.get(`/channels/${id}/members`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -211,13 +211,13 @@ const SingleChannel = () => {
   const leave = async () => {
     setLeaving(true);
     try {
-      await axios.post(`http://localhost:8000/api/channels/${id}/leave`, {}, {
+      await axios.post(`/channels/${id}/leave`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
       // Fetch members again to update the list
-      const response = await axios.get(`http://localhost:8000/api/channels/${id}/members`, {
+      const response = await axios.get(`/channels/${id}/members`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -235,7 +235,7 @@ const SingleChannel = () => {
   const deleteChannel = async () => {
     setDeleting(true);
     try {
-      await axios.delete(`http://localhost:8000/api/channels/${id}`, {
+      await axios.delete(`/channels/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -250,7 +250,7 @@ const SingleChannel = () => {
   };
 
   const handleDeleteClick = () => {
-    setShowModal(true); 
+    setShowModal(true);
   };
 
   const handleConfirmDelete = () => {
@@ -269,16 +269,16 @@ const SingleChannel = () => {
   const isUserMember = members.some(member => member.id === parseInt(userId, 10));
 
   return (
-    <div className="relative mx-8 ml-[19%] p-8">
+    <div className="relative my-12 mx-4 md:mx-8">
       {loading ? (
-        <Loader /> 
+        <Loader />
       ) : (
         <>
-          <Filters onSearch={handleSearch} onFilterChange={handleFilterChange} /> 
-          <div className='grid grid-cols-3 gap-4'>
+          <Filters onSearch={handleSearch} onFilterChange={handleFilterChange} />
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div className="col-span-2">
               {channel && (
-                <div className="bg-white shadow-lg rounded-lg p-6 ">
+                <div className="bg-white shadow-lg rounded-lg p-6">
                   <div className='flex items-center justify-between'>
                     <h1 className="text-3xl font-bold text-gray-800">{channel.name}</h1>
                     <div className='flex items-center'>
@@ -331,15 +331,17 @@ const SingleChannel = () => {
                 </div>
               )}
             </div>
-            <ChannelMembers members={members} setMembers={setMembers} />
+            <div className="col-span-1">
+              <ChannelMembers members={members} setMembers={setMembers} />
+            </div>
           </div>
         </>
       )}
       {showModal && (
-        <ConfirmationModal 
-          message="Are you sure you want to delete this channel?" 
-          onConfirm={handleConfirmDelete} 
-          onCancel={handleCancelDelete} 
+        <ConfirmationModal
+          message="Are you sure you want to delete this channel?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
         />
       )}
       {deleting && (

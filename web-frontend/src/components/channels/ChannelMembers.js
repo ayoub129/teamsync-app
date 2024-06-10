@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 
@@ -13,7 +13,7 @@ const ChannelMembers = ({ members, setMembers }) => {
     const fetchFriendStatuses = async () => {
       try {
         const memberIds = members.map(member => member.id);
-        const response = await axios.post(`http://localhost:8000/api/friend-statuses`, { members: memberIds }, {
+        const response = await axios.post(`/friend-statuses`, { members: memberIds }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -39,7 +39,7 @@ const ChannelMembers = ({ members, setMembers }) => {
     setLoadingMemberId(memberId);
     if (status === 'not_friends') {
       try {
-        await axios.post(`http://localhost:8000/api/send-friend-request`, { receiver_id: memberId }, {
+        await axios.post(`/send-friend-request`, { receiver_id: memberId }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -73,12 +73,16 @@ const ChannelMembers = ({ members, setMembers }) => {
   };
 
   return (
-    <div className="h-[500px] p-4 bg-white shadow-lg overflow-y-scroll">
+    <div className="h-[500px] p-4 bg-white shadow-lg rounded-lg overflow-y-auto">
       <h2 className='text-xl font-semibold my-5'>Channel Members</h2>
       {members.map(member => (
-        <div key={member.id} className="flex items-center justify-between p-2 mb-2 bg-white rounded shadow">
+        <div key={member.id} className="flex items-center justify-between p-2 mb-2 bg-gray-100 rounded shadow">
           <div className="flex items-center">
-            <img src={"https://images.unsplash.com/photo-1581382575275-97901c2635b7?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={member.name} className="w-10 h-10 rounded-full mr-3" />
+            <img 
+              src={"https://images.unsplash.com/photo-1581382575275-97901c2635b7?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} 
+              alt={member.name} 
+              className="w-10 h-10 rounded-full mr-3" 
+            />
             <span>{member.name}</span>
           </div>
           {member.id !== parseInt(userId, 10) && (
