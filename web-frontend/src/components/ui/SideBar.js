@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Button from './Button';
 import { Link } from 'react-router-dom';
 import MenuItem from './MenuItem';
-import DiscussionModal from '../discussion/DiscussionModal'; // Import the DiscussionModal component
+import DiscussionModal from '../discussion/DiscussionModal'; 
 
-const SideBar = ({ active }) => {
+const SideBar = ({ active, isSidebarOpen }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const admin = localStorage.getItem('admin');
 
@@ -19,7 +19,7 @@ const SideBar = ({ active }) => {
   const userId = localStorage.getItem('user_id');
 
   return (
-    <div className='w-[16.66%] min-h-screen border-r fixed top-0 left-0 mx-8'>
+    <div className={`w-[16.66%] min-h-screen border-r fixed top-0 left-0 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
       <div className='mt-7'></div>
       <Link to="/" className='text-[#0F2239] text-2xl font-bold'>NANA CHAT</Link>
       <Button handlePress={handlePress} color='bg-sky-500' container='mr-8 mt-[4rem]'>New Discussion</Button>
@@ -29,10 +29,7 @@ const SideBar = ({ active }) => {
       <MenuItem link={"/groups"} title={"Groups"} active={active === "groups"} />
       <MenuItem link={"/chat"} title={"Chats"} active={active === "chats"} />
       <MenuItem link={`/profile/${userId}`} title={"Profile"} active={active === "profile"} />
-      {
-        admin === '1' && <MenuItem link={"/video-chat"} title={"start a video chat"} active={active === "video"} />
-      }
-      
+      {admin === '1' && <MenuItem link={"/video-chat"} title={"start a video chat"} active={active === "video"} />}
       <DiscussionModal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
     </div>
   );

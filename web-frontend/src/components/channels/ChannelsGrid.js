@@ -1,7 +1,6 @@
-import React, { useEffect, useContext, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Channel from './Channel';
-import { AppContext } from '../../context/AppContext';
-import axios from 'axios';
+import axios from '../../axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import Loader from '../ui/Loader';
@@ -9,46 +8,43 @@ import Loader from '../ui/Loader';
 const ChannelsGrid = ({ all = false }) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // Add state for total pages
-  const { state, dispatch } = useContext(AppContext);
-  const { channels } = state;
+  const [totalPages, setTotalPages] = useState(1);
+  const [channels, setChannels] = useState([]);
   const navigate = useNavigate();
 
   const fetchPopularChannel = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/api/popular/channels', {
+      const response = await axios.get('/popular/channels', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
-      dispatch({ type: 'SET_CHANNELS', payload: response.data.popularChannels });
-      setTotalPages(1); 
+      setChannels(response.data.popularChannels);
+      setTotalPages(1);
     } catch (error) {
       console.error('Error fetching channels:', error);
     } finally {
       setLoading(false);
     }
-  },[ dispatch]);
+  }, []);
 
   const fetchChannels = useCallback(async (page) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/channels?page=${page}`, {
+      const response = await axios.get(`/channels?page=${page}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
-      dispatch({ type: 'SET_CHANNELS', payload: response.data.channels });
-      setTotalPages(response.data.totalPages); 
+      setChannels(response.data.channels);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching channels:', error);
     } finally {
       setLoading(false);
     }
-  },[dispatch]);
+  }, []);
 
   useEffect(() => {
     if (all) {
@@ -56,7 +52,7 @@ const ChannelsGrid = ({ all = false }) => {
     } else {
       fetchPopularChannel();
     }
-  }, [all , page ,fetchChannels , fetchPopularChannel]);
+  }, [all, page, fetchChannels, fetchPopularChannel]);
 
   const getRandomColorClass = () => {
     const colors = ['bg-blue-500', 'bg-orange-500', 'bg-pink-500', 'bg-red-500', 'bg-green-500', 'bg-yellow-500'];
@@ -140,7 +136,7 @@ const ChannelsGrid = ({ all = false }) => {
   };
 
   return (
-    <div className='my-12 mx-8 ml-[19%]'>
+    <div className='my-12 mx-8 ml-0 md:ml-[19%]'>
       <div className='flex items-center justify-between'>
         <h2 className='text-[#0F2239] text-2xl font-bold ml-4'>{all ? 'All Channels' : 'Most Popular Channels'}</h2>
         
@@ -153,7 +149,7 @@ const ChannelsGrid = ({ all = false }) => {
       ) : (
         <>
           {channels.length !== 0 ? (
-            <div className='grid grid-cols-3 gap-4 ml-4 mt-5'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 ml-4 mt-5'>
               {channels.map((channel) => (
                 <Channel
                   key={channel.id}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axios'; 
 import Search from './Search';
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userImage, setUserImage] = useState('https://via.placeholder.com/40');
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Header = () => {
       const user_id = localStorage.getItem('user_id');
       if (user_id) {
         try {
-          const response = await axios.get(`http://localhost:8000/api/users/${user_id}/image`, {
+          const response = await axios.get(`/users/${user_id}/image`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -52,7 +52,10 @@ const Header = () => {
   };
 
   return (
-    <header className='flex items-center justify-between my-5 mx-8 ml-[19%]'>
+    <header className='flex items-center justify-between my-5 mx-8 ml-[19%] md:ml-0'>
+      <button onClick={toggleSidebar} className="block md:hidden text-2xl mr-4">
+        <i className="fas fa-bars"></i>
+      </button>
       <h1 className='w-full flex'>
         <Search />
       </h1>

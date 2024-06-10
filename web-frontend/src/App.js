@@ -34,14 +34,14 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/edit-channel/:id" element={<EditChannel />} />
+          <Route path="/create-channel" element={<CreateChannel />} />
+          <Route path="/channels" element={<Channels />} />
+          <Route path="/channels/:id" element={<Channel />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/update-pass/:id" element={<UpdatePassword />} />
-          <Route path="/channels" element={<Channels />} />
-          <Route path="/channels/:id" element={<Channel />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/create-channel" element={<CreateChannel />} />
-          <Route path="/edit-channel/:id" element={<EditChannel />} />
           <Route path="/edit-group/:id" element={<EditGroup />} />
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/discussion/:id" element={<Discussion />} />

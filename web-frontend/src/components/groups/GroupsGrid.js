@@ -1,39 +1,36 @@
-import React, { useEffect, useContext, useState, useCallback } from 'react';
-import { AppContext } from '../../context/AppContext';
+import React, { useEffect,  useState, useCallback } from 'react';
 import Group from './Group';
-import axios from 'axios';
+import axios from '../../axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import Loader from '../ui/Loader';
 
 const GroupsGrid = ({ all = false }) => {
   const [loading, setLoading] = useState(false);
-  const { state, dispatch } = useContext(AppContext);
-  const { groups } = state;
+  const [groups, setGroups] = useState([]);
+  const navigate = useNavigate();
 
   const getImageUrl = (imagePath) => {
-    return `http://localhost:8000/storage/${imagePath}`;
+    return `${process.env.URL}/storage/${imagePath}`;
   };
 
-  const navigate = useNavigate();
 
   const fetchGroups = useCallback(async () => {
     setLoading(true);
-    const url = all ? 'http://localhost:8000/api/groups' : 'http://localhost:8000/api/user/groups';
+    const url = all ? '/groups' : '/user/groups';
     try {
-      const response = await axios.get(url, {
+      const response = await axiosInstance.get(url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
-      dispatch({ type: 'SET_GROUPS', payload: response.data.groups });
+      setGroups(response.data.groups);
     } catch (error) {
       console.error('Error fetching groups:', error);
     } finally {
       setLoading(false);
     }
-  }, [all, dispatch]);
+  }, [all]);
 
   useEffect(() => {
     fetchGroups();
@@ -43,8 +40,9 @@ const GroupsGrid = ({ all = false }) => {
     navigate('/create-group');
   };
 
+
   return (
-    <div className='my-12 mx-8 ml-[19%]'>
+    <div className='my-12 mx-8 ml-0 md:ml-[19%]'>
       <div className='flex items-center justify-between'>
         <h2 className='text-[#0F2239] text-2xl font-bold ml-4'>
           {all ? 'All Groups' : 'Your Groups'}
@@ -58,7 +56,7 @@ const GroupsGrid = ({ all = false }) => {
       ) : (
         <>
           {groups.length !== 0 ? (
-            <div className='grid grid-cols-3 gap-4 ml-4 mt-5'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 ml-4 mt-5'>
               {groups.map((group) => {
                 const imageUrl = getImageUrl(group.image);
 

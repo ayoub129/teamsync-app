@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import axios from '../axios';
-import { AppContext } from '../context/AppContext';
-import { setUser } from '../context/actions';
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +21,6 @@ const SignUp = () => {
     accept: "",
   });
 
-  const { dispatch } = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,9 +81,7 @@ const SignUp = () => {
         // Save token in localStorage
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('admin', response.data.user.isAdmin);
-        
-        // Set user in context
-        setUser(dispatch, response.data.user);
+        localStorage.setItem('user_id', response.data.user.id);
 
         navigate('/');
       } catch (error) {
@@ -131,77 +126,77 @@ const SignUp = () => {
     setErrors({ ...errors, accept: "" });
   };
 
-return (
-  <div className="w-[90%] max-w-lg mx-auto min-h-screen flex items-center justify-center overflow-x-hidden my-12">
-    <div className="w-full shadow-md">
-      <div className="bg-gray-200 py-5 rounded-t border">
-        <h2 className="text-center mb-5 font-semibold text-3xl montserrat-font text-black">Register</h2>
-        <p className="text-center text-black font-semibold">
-          Already have an account? <Link className="text-blue-500 font-semibold" to="/login">Sign In</Link>
-        </p>
-      </div>
-      <div className="rounded-b border py-16 px-4">
-        <form onSubmit={handleSignUp}>
-          <div className="mb-4">
-            <Input
-              placeholder="Username"
-              id="name"
-              label="Username"
-              text={data.name}
-              handleChange={(e) => handleChange('name', e)}
-            />
-            {errors.name && <p className="text-red-500 mt-2">{errors.name}</p>}
-          </div>
-          <div className="mb-4">
-            <Input
-              placeholder="Email"
-              id="email"
-              label="Email"
-              text={data.email}
-              handleChange={(e) => handleChange('email', e)}
-            />
-            {errors.email && <p className="text-red-500 mt-2">{errors.email}</p>}
-          </div>
-          <div className="mb-4">
-            <Input
-              placeholder="Password"
-              id="password"
-              label="Password"
-              type="password"
-              text={data.password}
-              handleChange={(e) => handleChange('password', e)}
-            />
-            {errors.password && <p className="text-red-500 mt-2">{errors.password}</p>}
-          </div>
-          <div className="mb-4">
-            <Input
-              placeholder="Confirm Password"
-              id="confirm-password"
-              label="Confirm Password"
-              type="password"
-              text={data.confirmPassword}
-              handleChange={(e) => handleChange('confirmPassword', e)}
-            />
-            {errors.confirmPassword && <p className="text-red-500 mt-2">{errors.confirmPassword}</p>}
-          </div>
-          <div className="flex items-center mb-4">
-            <Input
-              text=""
-              Style="flex items-center "
-              id="checkbox"
-              order={"order-2 ml-2"}
-              type="checkbox"
-              label="I accept all terms and conditions"
-              handleChange={accept}
-            />
-          </div>
-          {errors.accept && <p className="text-red-500 mt-2">{errors.accept}</p>}
-          <Button handlePress={handleSignUp} color="bg-blue-400" container="w-full py-4">{loading ? 'Signing Up...' : 'Sign Up'}</Button>
-        </form>
+  return (
+    <div className="w-[90%] max-w-lg mx-auto min-h-screen flex items-center justify-center overflow-x-hidden my-12">
+      <div className="w-full shadow-md">
+        <div className="bg-gray-200 py-5 rounded-t border">
+          <h2 className="text-center mb-5 font-semibold text-3xl montserrat-font text-black">Register</h2>
+          <p className="text-center text-black font-semibold">
+            Already have an account? <Link className="text-blue-500 font-semibold" to="/login">Sign In</Link>
+          </p>
+        </div>
+        <div className="rounded-b border py-16 px-4">
+          <form onSubmit={handleSignUp}>
+            <div className="mb-4">
+              <Input
+                placeholder="Username"
+                id="name"
+                label="Username"
+                text={data.name}
+                handleChange={(e) => handleChange('name', e)}
+              />
+              {errors.name && <p className="text-red-500 mt-2">{errors.name}</p>}
+            </div>
+            <div className="mb-4">
+              <Input
+                placeholder="Email"
+                id="email"
+                label="Email"
+                text={data.email}
+                handleChange={(e) => handleChange('email', e)}
+              />
+              {errors.email && <p className="text-red-500 mt-2">{errors.email}</p>}
+            </div>
+            <div className="mb-4">
+              <Input
+                placeholder="Password"
+                id="password"
+                label="Password"
+                type="password"
+                text={data.password}
+                handleChange={(e) => handleChange('password', e)}
+              />
+              {errors.password && <p className="text-red-500 mt-2">{errors.password}</p>}
+            </div>
+            <div className="mb-4">
+              <Input
+                placeholder="Confirm Password"
+                id="confirm-password"
+                label="Confirm Password"
+                type="password"
+                text={data.confirmPassword}
+                handleChange={(e) => handleChange('confirmPassword', e)}
+              />
+              {errors.confirmPassword && <p className="text-red-500 mt-2">{errors.confirmPassword}</p>}
+            </div>
+            <div className="flex items-center mb-4">
+              <Input
+                text=""
+                Style="flex items-center "
+                id="checkbox"
+                order={"order-2 ml-2"}
+                type="checkbox"
+                label="I accept all terms and conditions"
+                handleChange={accept}
+              />
+            </div>
+            {errors.accept && <p className="text-red-500 mt-2">{errors.accept}</p>}
+            <Button handlePress={handleSignUp} color="bg-blue-400" container="w-full py-4">{loading ? 'Signing Up...' : 'Sign Up'}</Button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-);
-}
-  
+  );
+};
+
 export default SignUp;

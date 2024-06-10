@@ -1,14 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import axios from '../axios'; // Using the axios instance you configured
-import { AppContext } from '../context/AppContext';
-import { setUser } from '../context/actions';
+import axios from '../axios';
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { dispatch } = useContext(AppContext);
 
   const [data, setData] = useState({
     email: "",
@@ -62,7 +59,6 @@ const SignIn = () => {
           password: data.password
         });
 
-        setUser(dispatch, response.data.user);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('admin', response.data.user.is_admin);
         localStorage.setItem('user_id', response.data.user.id);
