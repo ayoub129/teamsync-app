@@ -10,7 +10,6 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PusherController;
 use App\Http\Controllers\VideoChatController;
-use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
