@@ -19,7 +19,7 @@ const GroupsGrid = ({ all = false }) => {
     setLoading(true);
     const url = all ? '/groups' : '/user/groups';
     try {
-      const response = await axiosInstance.get(url, {
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
