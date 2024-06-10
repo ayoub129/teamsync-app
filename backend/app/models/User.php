@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class user extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function friends()
     {
-        return $this->belongsToMany(Users::class, 'friends', 'user_id', 'friend_id');
+        return $this->belongsToMany(user::class, 'friends', 'user_id', 'friend_id');
     }
 }
