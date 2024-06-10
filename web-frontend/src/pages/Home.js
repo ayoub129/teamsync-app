@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="dashboard" isSidebarOpen={isSidebarOpen} />
+      <SideBar active="dashboard" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <ChannelsGrid />
       <GroupsGrid />
     </div>
