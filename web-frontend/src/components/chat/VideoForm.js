@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import AsyncSelect from 'react-select/async';
 import Button from '../ui/Button';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ const VideoForm = () => {
 
   const fetchChannels = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/channels', {
+      const response = await axios.get('/channels', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -42,7 +42,7 @@ const VideoForm = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:8000/api/video-chat', {
+      const response = await axios.post('/video-chat', {
         channel_id: selectedChannel.value,
         channel_name: selectedChannel.label
       }, {
@@ -61,7 +61,7 @@ const VideoForm = () => {
   };
 
   return (
-    <div className='ml-[19%] mx-8 p-8'>
+    <div className='md:ml-[19%] mx-8 p-8'>
       <h2 className='text-3xl text-center mb-4'>Create a Video Chat Room</h2>
       <form onSubmit={handleSubmit}>
         <div>
