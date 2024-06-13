@@ -36,6 +36,7 @@ const SingleGroup = () => {
   const [deleting, setDeleting] = useState(false); 
   const [discussionToDelete, setDiscussionToDelete] = useState(null); 
   const [showDeleteGroupModal, setShowDeleteGroupModal] = useState(false); // State for group delete confirmation
+  const [showModal, setShowModal] = useState(false); // State for group delete confirmation
   const userId = localStorage.getItem('user_id'); 
   const { toasts, showToast } = useCustomToast();
   const navigate = useNavigate();
