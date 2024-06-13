@@ -8,7 +8,6 @@ import GroupMembers from './GroupMembers';
 import Loader from '../ui/Loader';
 import ConfirmationModal from '../ui/ConfirmationModal'; 
 import Toast, { useCustomToast } from '../ui/CustomToast';
-import './SingleGroup.css'; // Make sure to create this CSS file
 
 // Custom hook to detect screen size
 const useIsSmallScreen = () => {
