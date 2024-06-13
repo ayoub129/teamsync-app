@@ -32,6 +32,12 @@
     transform: translateY(-50%);
     top: 50%;
   }
+
+  @media (min-width: 768px) {
+    .discussion-modal {
+      width: 75%;
+    }
+  }
   
   .discussion-modal-overlay {
     position: fixed;

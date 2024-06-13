@@ -285,6 +285,13 @@ const SingleGroup = () => {
                 </div>
               </div>
             )}
+         {showModal && (
+            <ConfirmationModal 
+              message="Are you sure you want to delete this discussion?" 
+              onConfirm={handleConfirmDeleteDiscussion} 
+              onCancel={handleCancelDeleteDiscussion} 
+           />
+          )}
             <div className="mt-8">
               {discussions.map((discussion) => (
                 <div key={discussion.id} className="mb-4 p-4 border rounded bg-white shadow-lg">
@@ -329,13 +336,6 @@ const SingleGroup = () => {
             </div>
           )}
         </>
-      )}
-      {showModal && (
-        <ConfirmationModal 
-          message="Are you sure you want to delete this discussion?" 
-          onConfirm={handleConfirmDeleteDiscussion} 
-          onCancel={handleCancelDeleteDiscussion} 
-        />
       )}
       {showDeleteGroupModal && (
         <ConfirmationModal 

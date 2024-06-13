@@ -28,7 +28,7 @@ const DiscussionModal = ({ isOpen, onRequestClose }) => {
 
   const fetchGroups = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/user/groups', {
+      const response = await axios.get('/user/groups', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -45,7 +45,7 @@ const DiscussionModal = ({ isOpen, onRequestClose }) => {
 
   const fetchChannels = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/channels', {
+      const response = await axios.get('/channels', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -84,7 +84,7 @@ const DiscussionModal = ({ isOpen, onRequestClose }) => {
       formData.append('file', file);
     }
 
-    let url = 'http://localhost:8000/api/discussions';
+    let url = '/discussions';
 
     try {
       setLoading(true);
