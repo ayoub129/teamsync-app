@@ -16,7 +16,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/friends', {
+        const response = await axios.get('/friends', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -36,7 +36,7 @@ const Chat = () => {
     if (selectedFriend) {
       const fetchMessages = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/messages/${selectedFriend.id}`, {
+          const response = await axios.get(`/messages/${selectedFriend.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },

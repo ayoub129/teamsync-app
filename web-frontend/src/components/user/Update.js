@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import Input from '../ui/Input';
 import ImageInput from '../ui/ImageInput';
 import Button from '../ui/Button';
@@ -40,10 +40,9 @@ const Update = () => {
       data.append('file', formData.file);
     }
 
-    console.log(`http://localhost:8000/api/users/${user_id}` , token , data)
     try {
       setLoading(true);
-      await axios.post(`http://localhost:8000/api/users/${user_id}`, data, {
+      await axios.post(`/users/${user_id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -58,7 +57,7 @@ const Update = () => {
   };
 
   return (
-    <div className='ml-[19%] mx-8 p-8'>
+    <div className='md:ml-[19%] mx-8 p-8'>
       <h3 className='text-center font-bold text-[#0F2239] text-[1.5rem]'>Update Profile</h3>
       <form onSubmit={handleSubmit} className='space-y-4'>
         <Input

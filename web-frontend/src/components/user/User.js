@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import Loader from '../ui/Loader';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const User = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/users/${userId}`, {
+                const response = await axios.get(`/users/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -21,7 +21,7 @@ const User = () => {
                 setUser(response.data.user);
 
 
-                const imageResponse = await axios.get(`http://localhost:8000/api/users/${userId}/image`, {
+                const imageResponse = await axios.get(`/users/${userId}/image`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -46,7 +46,7 @@ const User = () => {
     }
 
     return (
-        <div className="ml-[19%] mx-8">
+        <div className="md:ml-[19%] mx-8">
             <div className="ml-4 p-8 bg-white rounded-lg shadow-md">
                 <div className="flex items-center space-x-4">
                     <img
@@ -61,7 +61,7 @@ const User = () => {
                 </div>
                 <p className="mt-4 text-gray-700">{user.bio || 'Bio not available'}</p>
 
-                <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-4 bg-blue-100 rounded-lg text-center">
                         <h4 className="text-lg font-semibold">Channels</h4>
                         <p className="text-2xl font-bold">{user.channels_count}</p>
@@ -80,7 +80,7 @@ const User = () => {
                     </div>
                 </div>
 
-                <div className="mt-6 flex space-x-4">
+                <div className="mt-6 block md:flex space-x-4">
                     <Link
                         to="/update-profile"
                         className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"

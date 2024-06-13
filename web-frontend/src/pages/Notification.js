@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axios';
 import Button from '../components/ui/Button';
 import Loader from '../components/ui/Loader';
 import Header from '../components/ui/Header';
-import Sidebar from '../components/ui/SideBar';
+import SideBar from '../components/ui/SideBar';
 
 const Notification = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Notification = () => {
   const fetchFriendRequests = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/api/friend-requests', {
+      const response = await axios.get('/friend-requests', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -38,22 +38,35 @@ const Notification = () => {
 
   const acceptFriendRequest = async (requestId) => {
     try {
-      await axios.post(`http://localhost:8000/api/accept-friend-request/${requestId}`, {}, {
+      await axios.post(`/accept-friend-request/${requestId}`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      fetchFriendRequests(); // Refresh the friend requests list
+      fetchFriendRequests();
     } catch (error) {
       console.error('Error accepting friend request:', error);
     }
   };
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <>
-    <Header />
-    <Sidebar />
-    <div className="ml-[19%] mx-8 p-8 bg-white shadow-lg">
+      <Header toggleSidebar={toggleSidebar} />
+      <SideBar active="profile" isSidebarOpen={isSidebarOpen} />
+    <div className="md:ml-[19%] mx-8 p-8 bg-white shadow-lg">
       <h2 className="text-xl font-semibold my-5">Friend Requests</h2>
       {loading ? (
         <Loader />

@@ -1,13 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '../ui/Button';
 import Filters from '../ui/Filters'; 
 import parse from 'html-react-parser';
 import GroupMembers from './GroupMembers';
 import Loader from '../ui/Loader';
-import ConfirmationModal from '../ui/ConfirmationModal'; // Import the modal component
+import ConfirmationModal from '../ui/ConfirmationModal'; 
 import Toast, { useCustomToast } from '../ui/CustomToast';
+import './SingleGroup.css'; // Make sure to create this CSS file
+
+// Custom hook to detect screen size
+const useIsSmallScreen = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return isSmallScreen;
+};
 
 const SingleGroup = () => {
   const { id } = useParams();
@@ -16,18 +33,20 @@ const SingleGroup = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showModal, setShowModal] = useState(false); // State to handle modal visibility
-  const [deleting, setDeleting] = useState(false); // State to handle deletion loading
-  const [discussionToDelete, setDiscussionToDelete] = useState(null); // State to handle discussion to be deleted
-  const userId = localStorage.getItem('user_id'); // Get the user ID from localStorage
+  const [showSidebar, setShowSidebar] = useState(false); 
+  const [deleting, setDeleting] = useState(false); 
+  const [discussionToDelete, setDiscussionToDelete] = useState(null); 
+  const [showDeleteGroupModal, setShowDeleteGroupModal] = useState(false); // State for group delete confirmation
+  const userId = localStorage.getItem('user_id'); 
   const { toasts, showToast } = useCustomToast();
   const navigate = useNavigate();
+  const isSmallScreen = useIsSmallScreen();
 
   useEffect(() => {
     const fetchGroup = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/groups/${id}`, {
+        const response = await axios.get(`/groups/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -46,7 +65,7 @@ const SingleGroup = () => {
   const fetchDiscussions = async (filter = null, search = null) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/groups/${id}/discussions`, {
+      const response = await axios.get(`/groups/${id}/discussions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
@@ -165,7 +184,7 @@ const SingleGroup = () => {
   const deleteGroup = async () => {
     setDeleting(true);
     try {
-      await axios.delete(`http://localhost:8000/api/groups/${id}`, {
+      await axios.delete(`/groups/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -183,7 +202,7 @@ const SingleGroup = () => {
   const deleteDiscussion = async (discussionId) => {
     setDeleting(true);
     try {
-      await axios.delete(`http://localhost:8000/api/discussions/${discussionId}`, {
+      await axios.delete(`/discussions/${discussionId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -199,33 +218,50 @@ const SingleGroup = () => {
     }
   };
 
-  const handleDeleteClick = (discussionId) => {
+  const handleDeleteDiscussionClick = (discussionId) => {
     setDiscussionToDelete(discussionId);
     setShowModal(true); // Show the modal when delete button is clicked
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDeleteDiscussion = () => {
     setShowModal(false);
     deleteDiscussion(discussionToDelete);
   };
 
-  const handleCancelDelete = () => {
+  const handleCancelDeleteDiscussion = () => {
     setShowModal(false);
     setDiscussionToDelete(null);
+  };
+
+  const handleDeleteGroupClick = () => {
+    setShowDeleteGroupModal(true); // Show the modal when delete group button is clicked
+  };
+
+  const handleConfirmDeleteGroup = () => {
+    setShowDeleteGroupModal(false);
+    deleteGroup();
+  };
+
+  const handleCancelDeleteGroup = () => {
+    setShowDeleteGroupModal(false);
   };
 
   const edit = () => {
     navigate(`/edit-group/${id}`);
   };
 
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
   return (
-    <div className="relative mx-8 ml-[19%] p-8">
+    <div className="relative mx-8 md:ml-[19%] p-8">
       <Filters onSearch={handleSearch} onFilterChange={handleFilterChange} />
       {loading ? (
         <Loader />
       ) : (
-        <div className='grid grid-cols-3 gap-4'>
-          <div className="col-span-2">
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+          <div className="md:col-span-2">
             {group && (
               <div className="bg-white shadow rounded-lg p-6 ">
                 <div className='flex items-center justify-between'>
@@ -235,7 +271,7 @@ const SingleGroup = () => {
                       <Button handlePress={edit}>
                         <i className='fas fa-pen text-yellow-500'></i>
                       </Button>
-                      <Button handlePress={handleDeleteClick}>
+                      <Button handlePress={handleDeleteGroupClick}>
                         <i className='fas fa-trash-can text-red-500'></i>
                       </Button>
                     </div>
@@ -257,7 +293,7 @@ const SingleGroup = () => {
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-semibold">{discussion.title}</h2>
                         {parseInt(userId) === discussion.user_id && (
-                          <Button handlePress={() => handleDeleteClick(discussion.id)} >
+                          <Button handlePress={() => handleDeleteDiscussionClick(discussion.id)} >
                              <i className='fas fa-trash-can text-red-500'></i>
                           </Button>
                         )}
@@ -277,14 +313,35 @@ const SingleGroup = () => {
               </div>
             )}
           </div>
-          <GroupMembers groupId={id} />
+          {!isSmallScreen && <GroupMembers groupId={id} />}
         </div>
+      )}
+      {isSmallScreen && (
+        <>
+          <Button handlePress={toggleSidebar} color="bg-sky-500">Show Members</Button>
+          {showSidebar && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="bg-black opacity-50 absolute inset-0" onClick={toggleSidebar}></div>
+              <div className="bg-white p-8 rounded shadow-lg z-10">
+                <GroupMembers groupId={id} />
+                <Button handlePress={toggleSidebar} color="bg-red-500 mt-4">Close</Button>
+              </div>
+            </div>
+          )}
+        </>
       )}
       {showModal && (
         <ConfirmationModal 
           message="Are you sure you want to delete this discussion?" 
-          onConfirm={handleConfirmDelete} 
-          onCancel={handleCancelDelete} 
+          onConfirm={handleConfirmDeleteDiscussion} 
+          onCancel={handleCancelDeleteDiscussion} 
+        />
+      )}
+      {showDeleteGroupModal && (
+        <ConfirmationModal 
+          message="Are you sure you want to delete this group?" 
+          onConfirm={handleConfirmDeleteGroup} 
+          onCancel={handleCancelDeleteGroup} 
         />
       )}
       {deleting && (

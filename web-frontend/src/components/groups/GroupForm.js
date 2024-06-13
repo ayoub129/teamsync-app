@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Input from '../ui/Input';
 import AsyncSelect from 'react-select/async';
 import Button from '../ui/Button';
-import axios from 'axios';
+import axios from '../../axios';
 import ImageInput from '../ui/ImageInput';
 import Toast, { useCustomToast } from '../ui/CustomToast';
 import Loader from '../ui/Loader';
@@ -48,7 +48,7 @@ const GroupForm = () => {
     const fetchFriendOptions = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/api/friends', {
+            const response = await axios.get('/friends', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -69,7 +69,7 @@ const GroupForm = () => {
     const fetchGroupData = async (groupId) => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8000/api/groups/${groupId}`, {
+            const response = await axios.get(`/groups/${groupId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -113,7 +113,7 @@ const GroupForm = () => {
         try {
             let response;
             if (id) {
-                response = await axios.post(`http://localhost:8000/api/groups/${id}`, formData, {
+                response = await axios.post(`/groups/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -121,7 +121,7 @@ const GroupForm = () => {
                 });
                 showToast('Group updated successfully!', 'success');
             } else {
-                response = await axios.post('http://localhost:8000/api/groups', formData, {
+                response = await axios.post('/groups', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -145,13 +145,13 @@ const GroupForm = () => {
     
 
     return (
-        <div className='my-12 mx-8 ml-[19%] w-[70%]'>
+        <div className='my-12 md:my-6 mx-8 md:ml-[19%] md:w-[70%]'>
             {loading ? (
                 <Loader />
             ) : (
                 <div className="ml-4">
                     <form onSubmit={handleGroupSubmission}>
-                        <div className='flex items-center justify-between'>
+                        <div className='md:flex items-center justify-between'>
                             <Input
                                 label="Group Name"
                                 id='groupName'
@@ -159,10 +159,10 @@ const GroupForm = () => {
                                 text={group.groupName}
                                 placeholder='Group Name'
                                 type='text'
-                                Style="w-[48%] mt-[2rem]"
+                                Style="md:w-[48%] mt-[1rem] md:mt-[2rem]"
                                 error={errors.name}
                             />
-                            <div className="mt-[2rem] w-[48%]">
+                            <div className="mt-[1rem] md:mt-[2rem] md:w-[48%]">
                                 <label htmlFor="groupMembers" className="block font-semibold mb-4">Group Members</label>
                                 <AsyncSelect
                                     id="groupMembers"
@@ -185,7 +185,7 @@ const GroupForm = () => {
                             text={group.groupDescription}
                             placeholder='Group Description'
                             type='text'
-                            Style="w-full mt-[2rem]"
+                            Style="w-full mt-[1rem] md:mt-[2rem]"
                             error={errors.description}
                         />
                         <ImageInput
@@ -195,7 +195,7 @@ const GroupForm = () => {
                             supported="image/png, image/jpeg, image/jpg"
                             error={errors.image}
                         />
-                        <Button handlePress={handleGroupSubmission} type="submit" color="bg-blue-500 mt-8">
+                        <Button handlePress={handleGroupSubmission} type="submit" color="bg-blue-500 mt-5 md:mt-8">
                             {submitting ? 'Submitting...' : id ? 'Update Group' : 'Create Group'}
                         </Button>
                     </form>

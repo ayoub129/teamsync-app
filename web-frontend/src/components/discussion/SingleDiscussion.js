@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import { useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import Loader from '../ui/Loader';
@@ -14,7 +14,7 @@ const SingleDiscussion = () => {
         const fetchDiscussion = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:8000/api/discussions/${id}`, {
+                const response = await axios.get(`/discussions/${id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -23,7 +23,7 @@ const SingleDiscussion = () => {
                 setDiscussion(fetchedDiscussion);
 
                 if (fetchedDiscussion.user_id) {
-                    const userResponse = await axios.get(`http://localhost:8000/api/users/${fetchedDiscussion.user_id}/image`, {
+                    const userResponse = await axios.get(`/users/${fetchedDiscussion.user_id}/image`, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }
@@ -48,8 +48,10 @@ const SingleDiscussion = () => {
         return <div className='text-center'>No discussion found</div>;
     }
 
+    const url = process.env.URL
+
     return (
-        <div className="mx-8 ml-[19%] p-8">
+        <div className="mx-8 md:ml-[19%] p-8">
             <div className="bg-white shadow-lg rounded-lg p-6">
                 <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center">
@@ -69,7 +71,7 @@ const SingleDiscussion = () => {
                         <ul>
                             {discussion.files.map(file => (
                                 <li key={file.id} className="mb-2">
-                                    <a href={`http://localhost:8000/storage/${file.path}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                                    <a href={`${url}/storage/${file.path}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                         {file.name}
                                     </a>
                                 </li>

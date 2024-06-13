@@ -52,7 +52,7 @@ const Header = ({ toggleSidebar }) => {
   };
 
   return (
-    <header className='flex items-center justify-between my-5 mx-8 md:ml-[19%] ml-0'>
+    <header className='flex items-center justify-between my-5 mx-8 md:ml-[19%] '>
       <button onClick={toggleSidebar} className="block md:hidden text-2xl mr-4">
         <i className="fas fa-bars"></i>
       </button>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import { useParams } from 'react-router-dom';
 import Loader from '../ui/Loader';
 import Toast, { useCustomToast } from '../ui/CustomToast';
@@ -24,14 +24,14 @@ const Comments = () => {
         const fetchComments = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:8000/api/discussions/${id}/comments`, {
+                const response = await axios.get(`/discussions/${id}/comments`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
 
                 const commentsWithImages = await Promise.all(response.data.comments.map(async (comment) => {
-                    const userResponse = await axios.get(`http://localhost:8000/api/users/${comment.user_id}/image`, {
+                    const userResponse = await axios.get(`/users/${comment.user_id}/image`, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }
@@ -60,14 +60,14 @@ const Comments = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:8000/api/discussions/${id}/comments`, formData, {
+            const response = await axios.post(`/discussions/${id}/comments`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
 
-            const userResponse = await axios.get(`http://localhost:8000/api/users/${userId}/image`, {
+            const userResponse = await axios.get(`/users/${userId}/image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -92,7 +92,7 @@ const Comments = () => {
     const handleReply = async (commentId) => {
         try {
             setReplying(true);
-            const response = await axios.post(`http://localhost:8000/api/comments/${commentId}/reply`, {
+            const response = await axios.post(`/comments/${commentId}/reply`, {
                 content: replyContent,
             }, {
                 headers: {
@@ -100,7 +100,7 @@ const Comments = () => {
                 }
             });
 
-            const userResponse = await axios.get(`http://localhost:8000/api/users/${userId}/image`, {
+            const userResponse = await axios.get(`/users/${userId}/image`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -117,6 +117,8 @@ const Comments = () => {
         }
     };
 
+    const url = process.env.URL
+
     const handleDeleteClick = (commentId) => {
         setCommentToDelete(commentId);
         setShowModal(true); // Show the modal when delete button is clicked
@@ -124,7 +126,7 @@ const Comments = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8000/api/comments/${commentToDelete}`, {
+            await axios.delete(`/comments/${commentToDelete}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -158,7 +160,7 @@ const Comments = () => {
                                 {new Date(comment.created_at).toLocaleString()}
                             </p>
                             {comment.files && comment.files.length > 0 && (
-                                <a href={`http://localhost:8000/storage/${comment.files[0].path}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                                <a href={`${url}/storage/${comment.files[0].path}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                     View Attachment
                                 </a>
                             )}

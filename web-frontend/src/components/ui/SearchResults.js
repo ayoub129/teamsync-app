@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axios';
 import Loader from './Loader';
 
 const getExcerpt = (content, length = 100) => {
@@ -17,7 +17,7 @@ const SearchResults = () => {
     const fetchResults = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/${cat}/search/${search}`, {
+        const response = await axios.get(`/${cat}/search/${search}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -38,7 +38,7 @@ const SearchResults = () => {
   }
 
   return (
-    <div className="ml-[19%] mx-8 p-8">
+    <div className="md:ml-[19%] mx-8 p-8">
       <h1 className="text-xl font-bold mb-4">Search Results for "{search}" in {cat}</h1>
       <ul>
         {results.length > 0 ? (
