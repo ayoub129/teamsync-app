@@ -60,7 +60,7 @@ const SingleChannel = () => {
 
   useEffect(() => {
     fetchMembers();
-  }, [id]);
+  }, [id , members]);
 
   const fetchDiscussions = useCallback(async (filter = null, search = null) => {
     setLoading(true);
