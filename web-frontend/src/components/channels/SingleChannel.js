@@ -47,7 +47,6 @@ const SingleChannel = () => {
 
   useEffect(() => {
     const fetchMembers = async () => {
-      setLoading(true);
       try {
         const response = await axios.get(`/channels/${id}/members`, {
           headers: {
@@ -57,8 +56,6 @@ const SingleChannel = () => {
         setMembers(response.data.members);
       } catch (error) {
         console.error('Error fetching members:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
