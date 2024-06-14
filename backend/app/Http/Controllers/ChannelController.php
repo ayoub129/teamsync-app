@@ -88,6 +88,10 @@ class ChannelController extends Controller
             'status' => $request->input('status'),
         ]);
 
+        // Add the admin who created the channel to the members
+        $admin = $request->user();
+        $channel->users()->attach($admin->id);
+
         if ($request->filled('groups')) {
             $channel->groups()->sync($request->input('groups'));
         }
@@ -211,45 +215,45 @@ class ChannelController extends Controller
         return response()->json(['channels' => $channels], 200);
     }
 
-// Join a channel
-public function join(Request $request, $channelId)
-{
-    $user = $request->user();
-    $channel = Channel::find($channelId);
+    // Join a channel
+    public function join(Request $request, $channelId)
+    {
+        $user = $request->user();
+        $channel = Channel::find($channelId);
 
-    if (!$channel) {
-        return response()->json(['message' => 'Channel not found'], 404);
+        if (!$channel) {
+            return response()->json(['message' => 'Channel not found'], 404);
+        }
+
+        if ($channel->users()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'User is already a member of the channel'], 400);
+        }
+
+        $channel->users()->attach($user->id);
+        return response()->json(['message' => 'User joined the channel successfully'], 200);
     }
 
-    if ($channel->users()->where('user_id', $user->id)->exists()) {
-        return response()->json(['message' => 'User is already a member of the channel'], 400);
+    // Leave a channel
+    public function leave(Request $request, $channelId)
+    {
+        $user = $request->user();
+        $channel = Channel::find($channelId);
+
+        if (!$channel) {
+            return response()->json(['message' => 'Channel not found'], 404);
+        }
+
+        if (!$channel->users()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'User is not a member of the channel'], 400);
+        }
+
+        // Prevent admin from leaving the channel
+        if ($user->isAdmin()) {
+            return response()->json(['message' => 'Admin cannot leave the channel'], 403);
+        }
+
+        $channel->users()->detach($user->id);
+        return response()->json(['message' => 'User left the channel successfully'], 200);
     }
-
-    $channel->users()->attach($user->id);
-    return response()->json(['message' => 'User joined the channel successfully'], 200);
-}
-
-// Leave a channel
-public function leave(Request $request, $channelId)
-{
-    $user = $request->user();
-    $channel = Channel::find($channelId);
-
-    if (!$channel) {
-        return response()->json(['message' => 'Channel not found'], 404);
-    }
-
-    if (!$channel->users()->where('user_id', $user->id)->exists()) {
-        return response()->json(['message' => 'User is not a member of the channel'], 400);
-    }
-
-    // Prevent admin from leaving the channel
-    if ($user->isAdmin()) {
-        return response()->json(['message' => 'Admin cannot leave the channel'], 403);
-    }
-
-    $channel->users()->detach($user->id);
-    return response()->json(['message' => 'User left the channel successfully'], 200);
-}
     
 }

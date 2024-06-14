@@ -248,7 +248,11 @@ const SingleChannel = () => {
     navigate(`/edit-channel/${id}`);
   };
 
-  const isUserMember = members.some(member => member.id === parseInt(userId, 10));
+  const [isUserMember, setIsUserMember] = useState()
+
+  useEffect(() => {
+    setIsUserMember(members.some(member => member.id === parseInt(userId, 10)))
+  }, [members])
 
   return (
     <div className="relative my-12 mx-4 md:mx-8 md:ml-[19%]">
