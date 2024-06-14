@@ -38,7 +38,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:groups',
             'description' => 'required|string|max:255',
-            'members' => 'required|array',
+            'members' => 'nullable|array',
             'members.*' => 'exists:users,id',
             'image' => 'nullable|image|max:2048',
         ]);
