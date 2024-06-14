@@ -4,7 +4,7 @@ import Header from '../components/ui/Header';
 import SideBar from '../components/ui/SideBar';
 import ChannelForm from '../components/channels/ChannelForm';
 
-const CreateChannel = () => {
+const EditChannel = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -36,4 +36,4 @@ const CreateChannel = () => {
   )
 }
 
-export default CreateChannel
+export default EditChannel

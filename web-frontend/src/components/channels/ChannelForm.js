@@ -44,6 +44,7 @@ const ChannelForm = () => {
         channelDescription: channelData.description,
         channelStatus: channelData.status,
       });
+      console.log(channelData)
     } catch (error) {
       console.error('Error fetching channel data:', error.response ? error.response.data : error.message);
     } finally {

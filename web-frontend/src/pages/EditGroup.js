@@ -4,7 +4,7 @@ import Header from '../components/ui/Header';
 import SideBar from '../components/ui/SideBar';
 import GroupForm from '../components/groups/GroupForm';
 
-const CreateGroup = () => {
+const EditGroup = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,4 +29,4 @@ const CreateGroup = () => {
   )
 }
 
-export default CreateGroup
+export default EditGroup

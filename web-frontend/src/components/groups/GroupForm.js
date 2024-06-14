@@ -75,6 +75,7 @@ const GroupForm = () => {
                 }
             });
             const groupData = response.data.group;
+            console.log(groupData)
             setGroup({
                 groupName: groupData.name,
                 groupDescription: groupData.description,
