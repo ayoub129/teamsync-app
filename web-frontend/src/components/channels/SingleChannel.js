@@ -60,7 +60,7 @@ const SingleChannel = () => {
 
   useEffect(() => {
     fetchMembers();
-  }, [id , members]);
+  }, [id]);
 
   const fetchDiscussions = useCallback(async (filter = null, search = null) => {
     setLoading(true);
@@ -248,11 +248,11 @@ const SingleChannel = () => {
     navigate(`/edit-channel/${id}`);
   };
 
-  const [isUserMember, setIsUserMember] = useState()
+  const [isUserMember, setIsUserMember] = useState(false);
 
   useEffect(() => {
-    setIsUserMember(members.some(member => member.id === parseInt(userId, 10)))
-  }, [members])
+    setIsUserMember(members.some(member => member.id === parseInt(userId, 10)));
+  }, [members]);
 
   return (
     <div className="relative my-12 mx-4 md:mx-8 md:ml-[19%]">
