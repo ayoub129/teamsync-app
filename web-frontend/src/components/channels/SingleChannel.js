@@ -45,20 +45,20 @@ const SingleChannel = () => {
     fetchChannel();
   }, [id]);
 
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const response = await axios.get(`/channels/${id}/members`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setMembers(response.data.members);
-      } catch (error) {
-        console.error('Error fetching members:', error);
-      }
-    };
+  const fetchMembers = async () => {
+    try {
+      const response = await axios.get(`/channels/${id}/members`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setMembers(response.data.members);
+    } catch (error) {
+      console.error('Error fetching members:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchMembers();
   }, [id]);
 
@@ -184,13 +184,8 @@ const SingleChannel = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      // Fetch members again to update the list
-      const response = await axios.get(`/channels/${id}/members`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      setMembers(response.data.members);
+
+      fetchMembers();
       showToast('Successfully joined the channel', 'success');
     } catch (error) {
       console.error('Error joining channel:', error);
@@ -208,13 +203,8 @@ const SingleChannel = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      // Fetch members again to update the list
-      const response = await axios.get(`/channels/${id}/members`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      setMembers(response.data.members);
+
+      fetchMembers();
       showToast('Successfully left the channel', 'success');
     } catch (error) {
       console.error('Error leaving channel:', error);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import Loader from '../ui/Loader';
@@ -15,7 +15,7 @@ const GroupMembers = ({ groupId }) => {
     const fetchMembers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/groups/${groupId}/members`, {
+        const response = await axios.get(`/groups/${groupId}/members`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -35,7 +35,7 @@ const GroupMembers = ({ groupId }) => {
     const fetchFriendStatuses = async () => {
       try {
         const memberIds = members.map(member => member.id);
-        const response = await axios.post(`http://localhost:8000/api/friend-statuses`, { members: memberIds }, {
+        const response = await axios.post(`/friend-statuses`, { members: memberIds }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -61,7 +61,7 @@ const GroupMembers = ({ groupId }) => {
   const handleMemberAction = async (memberId, status) => {
     if (status === 'not_friends') {
       try {
-         await axios.post(`http://localhost:8000/api/send-friend-request`, { receiver_id: memberId }, {
+         await axios.post(`/send-friend-request`, { receiver_id: memberId }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
