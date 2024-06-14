@@ -269,7 +269,7 @@ const SingleChannel = () => {
   const isUserMember = members.some(member => member.id === parseInt(userId, 10));
 
   return (
-    <div className="relative my-12 mx-4 md:mx-8">
+    <div className="relative my-12 mx-4 md:mx-8 md:ml-[19%]">
       {loading ? (
         <Loader />
       ) : (
