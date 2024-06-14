@@ -23,7 +23,7 @@ const Channels = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="dashboard" isSidebarOpen={isSidebarOpen} />
+      <SideBar active="channels" isSidebarOpen={isSidebarOpen} />
       <ChannelsGrid all={true} />
     </div>
   )

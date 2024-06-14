@@ -3,11 +3,11 @@ provider "aws" {
 }
 
 resource "aws_security_group" "jenkins_sg" {
-  name        = "jenkins_sg_2"
+  name        = "jenkins_sg_1"
   description = "Security group for Jenkins instance"
 
   ingress = [
-        for port in [22, 80, 443, 8080, 9000, 3000] : {
+        for port in [22, 80, 389, 636, 6443 , 443, 8080, 9000, 3000, 8000, 6443]: {
             description      = "inbound rules"
             from_port        = port
             to_port          = port
@@ -30,12 +30,16 @@ resource "aws_security_group" "jenkins_sg" {
 
 resource "aws_instance" "jenkins" {
   ami           = "ami-0bb84b8ffd87024d8"
-  instance_type = "t2.micro"
-  user_data     = file("install.sh")
+  instance_type = "t2.large"
 
-  key_name = "key_amazon"
+  key_name = "amazon_key"
 
   security_groups = [aws_security_group.jenkins_sg.name]
+
+  root_block_device {
+    volume_type = "gp2"  
+    volume_size = 16   
+  }
 
   tags = {
     Name = "JenkinsInstance"
