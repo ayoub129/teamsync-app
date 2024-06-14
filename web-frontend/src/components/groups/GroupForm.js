@@ -105,11 +105,14 @@ const GroupForm = () => {
             formData.append('image', group.image);
         }
         
-        // Append each member individually
-        group.members.forEach(member => {
-            formData.append('members[]', member.value);
-        });
-    
+        if (group.members.length > 0) {
+            group.members.forEach(member => {
+                formData.append('members[]', member.value);
+            });
+        } else {
+            formData.append('members', '[]'); 
+        }
+
         try {
             let response;
             if (id) {
@@ -142,7 +145,6 @@ const GroupForm = () => {
             setSubmitting(false);
         }
     };
-    
 
     return (
         <div className='my-12 md:my-6 mx-8 md:ml-[19%] md:w-[70%]'>
