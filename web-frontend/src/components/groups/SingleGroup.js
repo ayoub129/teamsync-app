@@ -100,11 +100,6 @@ const SingleGroup = () => {
     }
   };
 
-  const handleFilterChange = (filter) => {
-    setPage(1); // Reset to the first page
-    fetchDiscussions(filter);
-  };
-
   const handleSearch = (searchTerm) => {
     setPage(1); // Reset to the first page
     fetchDiscussions(null, searchTerm);
@@ -256,7 +251,7 @@ const SingleGroup = () => {
 
   return (
     <div className="relative mx-8 md:ml-[19%] p-8">
-      <Filters onSearch={handleSearch} onFilterChange={handleFilterChange} />
+      <Filters onSearch={handleSearch}  />
       {loading ? (
         <Loader />
       ) : (

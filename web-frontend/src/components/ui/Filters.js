@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Input from './Input';
 import Select from './Select';
 
-const Filters = ({ onSearch, onFilterChange }) => {
+const Filters = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState('');
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -15,10 +14,6 @@ const Filters = ({ onSearch, onFilterChange }) => {
     onSearch(searchTerm);
   };
 
-  const handleFilterChange = (value) => {
-    setFilter(value);
-    onFilterChange(value);
-  };
 
   const filterOptions = [
     { value: '', text: 'Select Filter' },
@@ -30,17 +25,6 @@ const Filters = ({ onSearch, onFilterChange }) => {
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start mt-5 mb-8 space-y-4 md:space-y-0 md:space-x-4">
-      <div className="w-full md:w-1/4">
-        <h2 className="font-bold mb-4">Filter by</h2>
-        <Select
-          options={filterOptions}
-          value={filter}
-          onChange={handleFilterChange}
-          label=""
-          id="filter-select"
-          Style=""
-        />
-      </div>
       <div className="w-full md:w-1/4">
         <form onSubmit={handleSearchSubmit} className="relative">
           <Input

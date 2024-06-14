@@ -100,11 +100,6 @@ const SingleChannel = () => {
     }
   };
 
-  const handleFilterChange = (filter) => {
-    setPage(1); // Reset to the first page
-    fetchDiscussions(filter);
-  };
-
   const handleSearch = (searchTerm) => {
     setPage(1); // Reset to the first page
     fetchDiscussions(null, searchTerm);
@@ -271,7 +266,7 @@ const SingleChannel = () => {
         <Loader />
       ) : (
         <>
-          <Filters onSearch={handleSearch} onFilterChange={handleFilterChange} />
+          <Filters onSearch={handleSearch}  />
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div className="col-span-2">
               {channel && (
