@@ -11,7 +11,7 @@ const GroupsGrid = ({ all = false }) => {
   const navigate = useNavigate();
 
   const getImageUrl = (imagePath) => {
-    return `${process.env.URL}/storage/${imagePath}`;
+    return `${process.env.REACT_APP_API_URL_STORAGE}/storage/${imagePath}`;
   };
 
 
