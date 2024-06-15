@@ -22,7 +22,7 @@ const UpdateProfile = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="profile" isSidebarOpen={isSidebarOpen} />
+      <SideBar active="profile" isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Update />
     </div>
   )

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Pusher from 'pusher-js';
 import Header from '../components/ui/Header';
@@ -11,7 +12,21 @@ const Chat = () => {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -92,8 +107,8 @@ const Chat = () => {
 
   return (
     <div className="min-h-screen">
-      <Header />
-      <SideBar active="chats" />
+      <Header toggleSidebar={toggleSidebar} />
+      <SideBar toggleSidebar={toggleSidebar} active="chats" isSidebarOpen={isSidebarOpen} />
       <div className="ml-[19%] mx-8 p-8 flex">
         {loading ? (
           <div className="flex justify-center items-center w-full">

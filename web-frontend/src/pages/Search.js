@@ -22,7 +22,7 @@ const Search = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="dashboard" isSidebarOpen={isSidebarOpen} />
+      <SideBar toggleSidebar={toggleSidebar} active="dashboard" isSidebarOpen={isSidebarOpen} />
       <SearchResults />
     </div>
   );

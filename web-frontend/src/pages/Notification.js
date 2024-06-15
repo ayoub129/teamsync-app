@@ -65,7 +65,7 @@ const Notification = () => {
   return (
     <>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="profile" isSidebarOpen={isSidebarOpen} />
+      <SideBar toggleSidebar={toggleSidebar} active="profile" isSidebarOpen={isSidebarOpen} />
     <div className="md:ml-[19%] mx-8 p-8 bg-white shadow-lg">
       <h2 className="text-xl font-semibold my-5">Friend Requests</h2>
       {loading ? (
