@@ -318,7 +318,7 @@ const SingleChannel = () => {
               )}
             </div>
             <div className="col-span-1">
-              <ChannelMembers members={members} setMembers={setMembers} />
+              <ChannelMembers channelId={id} />
             </div>
           </div>
         </>
