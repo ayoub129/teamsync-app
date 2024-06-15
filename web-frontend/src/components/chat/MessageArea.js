@@ -7,7 +7,7 @@ const MessageArea = ({ messages, onSendMessage, newMessage, setNewMessage }) => 
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`p-2 mb-2 ${message.sender_id === parseInt(localStorage.getItem('user_id')) ? 'bg-blue-100' : 'bg-gray-100'} rounded`}
+            className={`p-2 mb-3 ${message.sender_id === parseInt(localStorage.getItem('user_id')) ? 'bg-blue-100' : 'bg-gray-100'} rounded`}
           >
             <p>{message.message}</p>
             <span className="text-xs text-gray-500">{new Date(message.created_at).toLocaleTimeString()}</span>
