@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axios';
 import Pusher from 'pusher-js';
@@ -19,7 +19,7 @@ const Chat = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate("/login");
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -27,11 +27,10 @@ const Chat = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get('/friends', {
+        const response = await axios.get('/api/friends', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -51,7 +50,7 @@ const Chat = () => {
     if (selectedFriend) {
       const fetchMessages = async () => {
         try {
-          const response = await axios.get(`/messages/${selectedFriend.id}`, {
+          const response = await axios.get(`/api/messages/${selectedFriend.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -63,10 +62,11 @@ const Chat = () => {
       };
 
       fetchMessages();
+      const url = process.env.REACT_APP_API_URL_STORAGE
 
       const pusher = new Pusher('9ada276d3331c72f98a1', {
         cluster: 'eu',
-        authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
+        authEndpoint: `${url}/api/broadcasting/auth`,
         auth: {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -76,7 +76,7 @@ const Chat = () => {
 
       const channel = pusher.subscribe(`private-chat.${selectedFriend.id}`);
       channel.bind('App\\Events\\MessageSent', function (data) {
-        console.log(data)
+        console.log(data);
         setMessages((prevMessages) => [...prevMessages, data.message]);
       });
 
@@ -90,7 +90,7 @@ const Chat = () => {
     if (newMessage.trim() === '') return;
 
     try {
-      const response = await axios.post('http://localhost:8000/api/messages', {
+      const response = await axios.post('/api/messages', {
         receiver_id: selectedFriend.id,
         message: newMessage,
       }, {
