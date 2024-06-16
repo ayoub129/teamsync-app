@@ -8,13 +8,9 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PusherController;
-use App\Http\Controllers\VideoChatController;
-use App\Models\User;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
-
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth:sanctum')->group(function () {
     
@@ -43,7 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // get members from a Group
     Route::get('/groups/{groupId}/members', [GroupController::class , 'getMembers']);
 
-
     /* friends Routes */
     // send a friends request 
     Route::post('/send-friend-request', [FriendRequestController::class, 'sendRequest']);
@@ -57,6 +52,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/friends', [FriendRequestController::class, 'getFriends']);
 
     Route::get('/friend-requests', [FriendRequestController::class, 'getFriendRequests']);
+
+    /* Routes for chat */
+    // get message
+    Route::get('/messages/{receiver_id}', [MessageController::class, 'index']);
+    // send message
+    Route::post('/messages', [MessageController::class, 'store']);
 
     /* Routes for channels */ 
     // Get all channels 
@@ -89,7 +90,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // popular channels 
     Route::get('/popular/channels/', [ChannelController::class, 'getPopularChannels']);
 
-    
     /* Routes for discussions */ 
     // Get all discussions 
     Route::get('/discussions', [DiscussionController::class, 'index']);
@@ -115,7 +115,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // search for a discussion
     Route::get('/discussion/search/{name}', [DiscussionController::class , 'search']);
     
-    
     /* Routes for comments */
     // get Comments
     Route::get('/discussions/{discussionId}/comments', [CommentController::class, 'index']);
@@ -128,7 +127,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Delete a Comment
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
-
 
     // update password
     Route::post('/reset-password',  [AuthController::class , 'updatePassword']);
@@ -149,20 +147,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // download files
     Route::get('/files/{file_id}', [FileController::class , 'download']);
 
-    Route::post('/video-chat', [VideoChatController::class, 'createVideoChat']);
-
-    Route::post('/pusher/send', [PusherController::class, 'send']);
-
-    Broadcast::channel('chat.{receiver_id}', function ($user, $receiver_id) {
-        return (int) $user->id === (int) $receiver_id || User::whereHas('friends', function($query) use ($user, $receiver_id) {
-            $query->where('friends.user_id', $user->id)
-                  ->where('friends.friend_id', $receiver_id);
-        })->exists();
+    // Broadcasting auth route
+    Route::post('/broadcasting/auth', function (Request $request) {
+        return Auth::user();
     });
-            
+
 });
 
 // Routes for authentication
 Route::post('/register', [AuthController::class , 'register']);
-
 Route::post('/login', [AuthController::class , 'login']);
