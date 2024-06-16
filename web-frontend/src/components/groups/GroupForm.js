@@ -66,6 +66,10 @@ const GroupForm = () => {
         }
     };
 
+    const getImageUrl = (imagePath) => {
+        return `${process.env.REACT_APP_API_URL_STORAGE}/storage/${imagePath}`;
+    };
+
     const fetchGroupData = async (groupId) => {
         setLoading(true);
         try {
@@ -75,7 +79,7 @@ const GroupForm = () => {
                 }
             });
             const groupData = response.data.group;
-            console.log(groupData)
+            const imageUrl = getImageUrl(groupData.image);
             setGroup({
                 groupName: groupData.name,
                 groupDescription: groupData.description,
@@ -83,7 +87,7 @@ const GroupForm = () => {
                     value: user.id,
                     label: user.name
                 })),
-                image: groupData.image || null,
+                image: imageUrl || null,
             });
         } catch (error) {
             console.error('Error fetching group data:', error.response ? error.response.data : error.message);
@@ -105,13 +109,13 @@ const GroupForm = () => {
         if (group.image instanceof File) {
             formData.append('image', group.image);
         }
-        
+
         if (group.members.length > 0) {
             group.members.forEach(member => {
                 formData.append('members[]', member.value);
             });
         } else {
-            formData.append('members', '[]'); 
+            formData.append('members', '[]');
         }
 
         try {

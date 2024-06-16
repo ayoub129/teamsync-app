@@ -72,9 +72,9 @@ class GroupController extends Controller
     // Get a specific Group
     public function show($id)
     {
-        $group = Group::findOrFail($id);
+        $group = Group::with('users')->findOrFail($id);
         return response()->json(['group' => $group], 200);
-    }
+        }
 
     // Update a specific Group
     public function update(Request $request, $id)
