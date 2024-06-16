@@ -25,25 +25,21 @@ const SingleChannel = () => {
   const { toasts, showToast } = useCustomToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchChannel = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`/channels/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setChannel(response.data.channel);
-      } catch (error) {
-        console.error('Error fetching channel:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchChannel();
-  }, [id]);
+  const fetchChannel = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/channels/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setChannel(response.data.channel);
+    } catch (error) {
+      console.error('Error fetching channel:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchMembers = async () => {
     try {
@@ -59,8 +55,13 @@ const SingleChannel = () => {
   };
 
   useEffect(() => {
+    fetchChannel();
     fetchMembers();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    setIsUserMember(members.some(member => member.id === parseInt(userId, 10)));
+  }, [members, userId]);
 
   const fetchDiscussions = useCallback(async (filter = null, search = null) => {
     setLoading(true);
@@ -252,7 +253,7 @@ const SingleChannel = () => {
 
   useEffect(() => {
     setIsUserMember(members.some(member => member.id === parseInt(userId, 10)));
-  }, []);
+  }, [members, userId]);
 
   return (
     <div className="relative my-12 mx-4 md:mx-8 md:ml-[19%]">
