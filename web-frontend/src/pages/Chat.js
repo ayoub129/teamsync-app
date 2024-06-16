@@ -8,8 +8,8 @@ import FriendsList from '../components/chat/FriendList';
 import MessageArea from '../components/chat/MessageArea';
 
 const Chat = () => {
-  const [friends, setFriends] = useState([]);
-  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [friendsAndGroups, setFriendsAndGroups] = useState({ friends: [], groups: [] });
+  const [selectedFriendOrGroup, setSelectedFriendOrGroup] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const navigate = useNavigate();
@@ -28,29 +28,29 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    const fetchFriends = async () => {
+    const fetchFriendsAndGroups = async () => {
       try {
-        const response = await axios.get('/api/friends', {
+        const response = await axios.get('/api/friends-groups', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        setFriends(response.data.friends);
+        setFriendsAndGroups(response.data);
       } catch (error) {
-        console.error('Error fetching friends:', error);
+        console.error('Error fetching friends and groups:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFriends();
+    fetchFriendsAndGroups();
   }, []);
 
   useEffect(() => {
-    if (selectedFriend) {
+    if (selectedFriendOrGroup) {
       const fetchMessages = async () => {
         try {
-          const response = await axios.get(`/api/messages/${selectedFriend.id}`, {
+          const response = await axios.get(`/api/messages/${selectedFriendOrGroup.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -62,11 +62,10 @@ const Chat = () => {
       };
 
       fetchMessages();
-      const url = process.env.REACT_APP_API_URL_STORAGE
 
-      const pusher = new Pusher('9ada276d3331c72f98a1', {
-        cluster: 'eu',
-        authEndpoint: `${url}/api/broadcasting/auth`,
+      const pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
+        cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER,
+        authEndpoint: `${process.env.REACT_APP_API_URL}/broadcasting/auth`,
         auth: {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -74,24 +73,23 @@ const Chat = () => {
         },
       });
 
-      const channel = pusher.subscribe(`private-chat.${selectedFriend.id}`);
-      channel.bind('App\\Events\\MessageSent', function (data) {
-        console.log(data);
+      const channel = pusher.subscribe(`private-chat.${selectedFriendOrGroup.id}`);
+      channel.bind('App\\Events\\MessageSent', (data) => {
         setMessages((prevMessages) => [...prevMessages, data.message]);
       });
 
       return () => {
-        pusher.unsubscribe(`private-chat.${selectedFriend.id}`);
+        pusher.unsubscribe(`private-chat.${selectedFriendOrGroup.id}`);
       };
     }
-  }, [selectedFriend]);
+  }, [selectedFriendOrGroup]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === '') return;
 
     try {
       const response = await axios.post('/api/messages', {
-        receiver_id: selectedFriend.id,
+        receiver_id: selectedFriendOrGroup.id,
         message: newMessage,
       }, {
         headers: {
@@ -113,12 +111,16 @@ const Chat = () => {
         {loading ? (
           <div className="flex justify-center items-center w-full">
             <div className="loader"></div>
-            <span>Loading friends...</span>
+            <span>Loading friends and groups...</span>
           </div>
         ) : (
           <>
-            <FriendsList friends={friends} onSelectFriend={setSelectedFriend} />
-            {selectedFriend && (
+            <FriendsList 
+              friends={friendsAndGroups.friends} 
+              groups={friendsAndGroups.groups} 
+              onSelectFriendOrGroup={setSelectedFriendOrGroup} 
+            />
+            {selectedFriendOrGroup && (
               <MessageArea
                 messages={messages}
                 onSendMessage={handleSendMessage}

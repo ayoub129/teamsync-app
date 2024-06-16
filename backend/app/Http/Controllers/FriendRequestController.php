@@ -68,6 +68,29 @@ class FriendRequestController extends Controller
         }
     }
 
+    public function getFriendsAndGroups(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        if ($user->isAdmin()) {
+            $friends = User::where('id', '!=', $user->id)->get();
+        } else {
+            $friends = $user->friends;
+        }
+
+        $groups = $user->groups; // Assuming there's a groups relationship on the User model
+
+        return response()->json([
+            'friends' => $friends,
+            'groups' => $groups
+        ], 200);
+    }
+
+
     public function getFriendStatuses(Request $request)
     {
         $userId = Auth::id();

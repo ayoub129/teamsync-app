@@ -54,10 +54,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/friend-requests', [FriendRequestController::class, 'getFriendRequests']);
 
     /* Routes for chat */
-    // get message
-    Route::get('/messages/{receiver_id}', [MessageController::class, 'index']);
     // send message
-    Route::post('/messages', [MessageController::class, 'store']);
+    Route::post('/send-message', [MessageController::class, 'sendMessage']);
+    // send group message
+    Route::post('/send-group-message', [MessageController::class, 'sendGroupMessage']);
+    // get message
+    Route::get('/messages', [MessageController::class, 'getMessages']);
+    // get group message
+    Route::get('/group-messages', [MessageController::class, 'getGroupMessages']);
+    // getFriendsAndGroups
+    Route::get('/friends-groups', [MessageController::class, 'getFriendsAndGroups']);
 
     /* Routes for channels */ 
     // Get all channels 

@@ -2,43 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Message;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Events\MessageSent;
+use App\Models\Message;
+use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index($receiver_id)
+    public function sendMessage(Request $request)
     {
-        $user_id = Auth::id();
-        $messages = Message::where(function ($query) use ($user_id, $receiver_id) {
-            $query->where('sender_id', $user_id)
-                  ->where('receiver_id', $receiver_id);
-        })->orWhere(function ($query) use ($user_id, $receiver_id) {
-            $query->where('sender_id', $receiver_id)
-                  ->where('receiver_id', $user_id);
-        })->get();
-
-        return response()->json(['messages' => $messages]);
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'receiver_id' => 'required|exists:users,id',
-            'message' => 'required|string',
-        ]);
-
         $message = Message::create([
-            'sender_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
+            'user_id' => $request->user()->id,
+            'receiver_id' => $request->input('receiver_id'),
+            'message' => $request->input('message')
         ]);
 
         broadcast(new MessageSent($message))->toOthers();
 
-        return response()->json(['message' => $message]);
+        return response()->json(['status' => 'Message Sent!', 'message' => $message]);
+    }
+
+    public function sendGroupMessage(Request $request)
+    {
+        $message = Message::create([
+            'user_id' => $request->user()->id,
+            'group_id' => $request->input('group_id'),
+            'message' => $request->input('message')
+        ]);
+
+        broadcast(new MessageSent($message))->toOthers();
+
+        return response()->json(['status' => 'Message Sent!', 'message' => $message]);
+    }
+
+    public function getMessages(Request $request)
+    {
+        $userId = $request->user()->id;
+        $receiverId = $request->input('receiver_id');
+
+        $messages = Message::where(function($query) use ($userId, $receiverId) {
+            $query->where('user_id', $userId)
+                  ->where('receiver_id', $receiverId);
+        })->orWhere(function($query) use ($userId, $receiverId) {
+            $query->where('user_id', $receiverId)
+                  ->where('receiver_id', $userId);
+        })->get();
+
+        return response()->json($messages);
+    }
+
+    public function getGroupMessages(Request $request)
+    {
+        $groupId = $request->input('group_id');
+
+        $messages = Message::where('group_id', $groupId)->get();
+
+        return response()->json($messages);
     }
 }
