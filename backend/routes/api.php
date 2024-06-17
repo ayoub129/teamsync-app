@@ -9,8 +9,6 @@ use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth:sanctum')->group(function () {
     
@@ -55,15 +53,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* Routes for chat */
     // send message
-    Route::post('/send-message', [MessageController::class, 'sendMessage']);
-    // send group message
-    Route::post('/send-group-message', [MessageController::class, 'sendGroupMessage']);
+    // Route::post('/send-message', [MessageController::class, 'sendMessage']);
+    // // send group message
+    // Route::post('/send-group-message', [MessageController::class, 'sendGroupMessage']);
     // get message
     Route::get('/messages', [MessageController::class, 'getMessages']);
     // get group message
     Route::get('/group-messages', [MessageController::class, 'getGroupMessages']);
-    // getFriendsAndGroups
-    Route::get('/friends-groups', [MessageController::class, 'getFriendsAndGroups']);
+    // // getFriendsAndGroups
+    // Route::get('/friends-groups', [MessageController::class, 'getFriendsAndGroups']);
 
     /* Routes for channels */ 
     // Get all channels 
@@ -153,13 +151,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // download files
     Route::get('/files/{file_id}', [FileController::class , 'download']);
 
-    // Broadcasting auth route
-    Route::post('/broadcasting/auth', function (Request $request) {
-        return Auth::user();
-    });
-
 });
 
 // Routes for authentication
 Route::post('/register', [AuthController::class , 'register']);
+
 Route::post('/login', [AuthController::class , 'login']);
