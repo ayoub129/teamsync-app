@@ -50,7 +50,7 @@ const Chat = () => {
     if (selectedFriendOrGroup) {
       const fetchMessages = async () => {
         try {
-          const response = await axios.get(`/api/messages/${selectedFriendOrGroup.id}`, {
+          const response = await axios.get(`/messages/${selectedFriendOrGroup.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -88,7 +88,7 @@ const Chat = () => {
     if (newMessage.trim() === '') return;
 
     try {
-      const response = await axios.post('/api/messages', {
+      const response = await axios.post('/messages', {
         receiver_id: selectedFriendOrGroup.id,
         message: newMessage,
       }, {
