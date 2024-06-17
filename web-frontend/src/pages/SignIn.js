@@ -62,6 +62,7 @@ const SignIn = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('admin', response.data.user.is_admin);
         localStorage.setItem('user_id', response.data.user.id);
+        localStorage.setItem('username', response.data.user.name);
 
         if (data.remember) {
           localStorage.setItem('rememberedEmail', data.email);

@@ -82,6 +82,7 @@ const SignUp = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('admin', response.data.user.isAdmin);
         localStorage.setItem('user_id', response.data.user.id);
+        localStorage.setItem('username', response.data.user.name);
 
         navigate('/');
       } catch (error) {
