@@ -41,8 +41,8 @@ const Video = () => {
         roomName={id}
         configOverwrite={{
           prejoinPageEnabled: false, 
-          startWithAudioMuted: false,
-          startWithVideoMuted: false,
+          startWithAudioMuted: true,
+          startWithVideoMuted: true,
         }}
         userInfo={{
           displayName: localStorage.getItem('username'), 
