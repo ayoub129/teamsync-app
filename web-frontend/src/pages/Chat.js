@@ -30,7 +30,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchFriendsAndGroups = async () => {
       try {
-        const response = await axios.get('/api/friends-groups', {
+        const response = await axios.get('/friends-groups', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
