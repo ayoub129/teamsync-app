@@ -79,3 +79,6 @@
     overflow-y: scroll;
   }
 
+  #video-container div {
+    height: 100%;
+  }

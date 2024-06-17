@@ -16,7 +16,7 @@ const Video = () => {
     }
     
     const admin = localStorage.getItem('admin');
-    setIsAdmin(admin === 'true');
+    setIsAdmin(admin === '1');
   }, [navigate]);
 
   const handleLeave = async () => {
@@ -35,7 +35,7 @@ const Video = () => {
   };
 
   return (
-    <div ref={jitsiContainer} className='my-12 mx-4 md:mx-8 md:ml-[19%] h-[75vh] w-[80%]'>
+    <div ref={jitsiContainer} id='video-container' className='my-12 mx-4 md:mx-8 md:ml-[19%] h-[75vh] w-[80%]'>
       <JitsiMeeting
         domain="meet.jit.si" 
         roomName={id}
