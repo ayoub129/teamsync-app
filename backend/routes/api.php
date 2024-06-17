@@ -8,6 +8,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\VideoChatController;
 use App\Models\FriendRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -151,6 +152,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // download files
     Route::get('/files/{file_id}', [FileController::class , 'download']);
+
+    // video creation
+    Route::post('/video-chat', [VideoChatController::class , 'createVideoChat']);
 
 });
 

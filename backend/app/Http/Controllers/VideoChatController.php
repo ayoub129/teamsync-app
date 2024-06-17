@@ -28,9 +28,7 @@ class VideoChatController extends Controller
             'created_by' => $user->id,
         ]);
 
-        $this->sendNotification($videoChatRoom);
-
-        return response()->json(['message' => 'Video chat room created successfully', 'room' => $videoChatRoom], 201);
+        return response()->json(['message' => 'Video chat room created successfully', 'room' => $videoChatRoom->id], 201);
     }
 
     private function sendNotification($videoChatRoom)
