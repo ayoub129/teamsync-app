@@ -8,6 +8,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
+use App\Models\FriendRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -61,7 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // get group message
     Route::get('/group-messages', [MessageController::class, 'getGroupMessages']);
     // // getFriendsAndGroups
-    // Route::get('/friends-groups', [MessageController::class, 'getFriendsAndGroups']);
+    Route::get('/friends-groups', [FriendRequestController::class, 'getFriendsAndGroups']);
 
     /* Routes for channels */ 
     // Get all channels 
