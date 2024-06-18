@@ -7,6 +7,7 @@ const Video = () => {
   const { id } = useParams();
   const jitsiContainer = useRef(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [roomName, setRoomName] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -16,6 +17,10 @@ const Video = () => {
     
     const admin = localStorage.getItem('admin');
     setIsAdmin(admin === '1');
+
+    const randomNum = Math.floor(Math.random() * 1000);
+    setRoomName(`${randomNum}-${id}`);
+
   }, [navigate]);
 
   const handleLeave = async () => {
@@ -27,7 +32,7 @@ const Video = () => {
   return (
     <div ref={jitsiContainer} id='video-container' className='my-12 mx-4 md:mx-8 md:ml-[19%] h-[75vh] w-[80%]'>
       <JitsiMeeting
-        roomName={id}
+        roomName={roomName}
         getIFrameRef = { node => node.style.height = '800px' }
         // configOverwrite={{
         //   prejoinPageEnabled: false, 
