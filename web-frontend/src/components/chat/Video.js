@@ -8,7 +8,7 @@ const Video = () => {
   const jitsiContainer = useRef(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [roomName, setRoomName] = useState('');
-  const domain = "meet.jitsi.si";
+  const domain = "8x8.vc";
 
   useEffect(() => {
     const token = localStorage.getItem('token');
