@@ -14,7 +14,12 @@ function Ch() {
     }, [messages]);
 
     const sendMessage = async () => {
-        await axios.post('/send-message', { message });
+        await axios.post('/send-message', { message } , {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
         setMessage('');
     };
 
