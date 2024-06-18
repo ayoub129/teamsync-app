@@ -1,57 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import axios from '../axios';
-import Echo from 'laravel-echo';
+// import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
 function Ch() {
-    useEffect(() => {
-        // Ensure Pusher is available globally
-        window.Pusher = Pusher;
-
-        // Reinitialize Echo instance
-        window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: process.env.REACT_APP_PUSHER_KEY,
-            cluster: 'eu',
-            forceTLS: true,
-            encrypted: true, // Add other Pusher options here
-            authEndpoint: '/broadcasting/auth',
-            auth: {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            }
-        });
-
-        console.log('Echo instance:', window.Echo);
-
-        const channel = window.Echo.channel('chat');
-        console.log('Channel instance:', channel);
-        console.log('Available methods on channel:', Object.keys(channel));
-
-        if (typeof channel.listen === 'function') {
-            channel.listen('MessageSent', (data) => {
-                console.log('Message received: ', data);
-                setMessages((prevMessages) => [...prevMessages, data.message]);
-            });
-        } else {
-            console.error('listen method is not available on channel');
-        }
-
-        // Cleanup listener on component unmount
-        return () => {
-            console.log('Stopping Echo listener');
-            if (window.Echo && typeof window.Echo.leaveChannel === 'function') {
-                window.Echo.leaveChannel('chat');
-            }
-        };
-    }, []);
-
-    const [messages, setMessages] = useState([]);
+    Pusher.logToConsole = true;
+    var pusher = new Pusher('c792b64a837850229f3a', {
+        cluster: 'eu'
+      });
+  
+    var channel = pusher.subscribe('chat');
+    channel.bind('MessageSent', function(data) {
+        console.log(JSON.stringify(data));
+    });
+  
     const [message, setMessage] = useState('');
 
     const sendMessage = async () => {
-        console.log('Sending message:', message);
         try {
             await axios.post('/send-message', { message }, {
                 headers: {
@@ -67,9 +32,9 @@ function Ch() {
     return (
         <div>
             <div className="messages">
-                {messages.map((msg, index) => (
+                {/* {messages.map((msg, index) => (
                     <div key={index}>{msg}</div>
-                ))}
+                ))} */}
             </div>
             <input
                 type="text"
