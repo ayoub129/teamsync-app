@@ -6,12 +6,17 @@ function Ch() {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
 
-    useEffect(() => {
+    const getMessages = () => {
         window.Echo.channel('chat')
-            .listen('MessageSent', (e) => {
-                console.log(e)
-                setMessages([...messages, e.message]);
-            });
+        .listen('MessageSent', (e) => {
+            console.log(e)
+            setMessages([...messages, e.message]);
+        });
+
+    }
+
+    useEffect(() => {
+        getMessages()
     }, [messages]);
 
     const sendMessage = async () => {
@@ -21,6 +26,7 @@ function Ch() {
             }
           }
         );
+        getMessages()
         setMessage('');
     };
 
