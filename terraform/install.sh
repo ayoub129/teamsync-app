@@ -1,4 +1,4 @@
-ssh -i amazon_key.pem ec2-user@34.229.66.208
+ssh -i amazon_key.pem ec2-user@100.24.72.90
 
 #!/bin/bash
 set -e
