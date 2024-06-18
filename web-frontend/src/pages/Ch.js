@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../axios';
-import Echo from 'laravel-echo'
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 function Ch() {
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: process.env.REACT_APP_PUSHER_KEY,
-        cluster: 'eu',
-        forceTLS: true
-      });
-      
-      
-      const [messages, setMessages] = useState([]);
-      const [message, setMessage] = useState('');
-      
-      useEffect(() => {
-          console.log('Setting up Echo listener');
-        const channel = Echo.channel('chat')
+    useEffect(() => {
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.REACT_APP_PUSHER_KEY,
+            cluster: 'eu',
+            forceTLS: true
+        });
+
+        // Log the Echo instance to check its properties
+        console.log('Echo instance:', window.Echo);
+
+        const channel = window.Echo.channel('chat')
             .listen('MessageSent', (data) => {
                 console.log('Message received: ', data);
                 setMessages((prevMessages) => [...prevMessages, data.message]);
@@ -28,6 +27,9 @@ function Ch() {
             channel.stopListening('MessageSent');
         };
     }, []);
+
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState('');
 
     const sendMessage = async () => {
         console.log('Sending message:', message);
