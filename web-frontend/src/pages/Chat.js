@@ -57,12 +57,12 @@ const Chat = () => {
           });
           setMessages(response.data.messages);
         } catch (error) {
-          console.error('Error fetching messages:', error);
+          console.error('Error fetching messages:', error.response ? error.response.data : error.message);
         }
       };
-
+  
       fetchMessages();
-
+  
       const pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
         cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER,
         authEndpoint: `${process.env.REACT_APP_API_URL}/broadcasting/auth`,
@@ -72,18 +72,21 @@ const Chat = () => {
           },
         },
       });
-
-      const channel = pusher.subscribe(`private-chat.${selectedFriendOrGroup.id}`);
-      channel.bind('App\\Events\\MessageSent', (data) => {
+  
+      const channelName = selectedFriendOrGroup.group_id 
+          ? `group-chat.${selectedFriendOrGroup.id}`
+          : `private-chat.${selectedFriendOrGroup.id}`;
+      const channel = pusher.subscribe(channelName);
+      channel.bind('MessageSent', (data) => {
         setMessages((prevMessages) => [...prevMessages, data.message]);
       });
-
+  
       return () => {
-        pusher.unsubscribe(`private-chat.${selectedFriendOrGroup.id}`);
+        pusher.unsubscribe(channelName);
       };
     }
   }, [selectedFriendOrGroup]);
-
+  
   const handleSendMessage = async () => {
     if (newMessage.trim() === '') return;
 

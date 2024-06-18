@@ -8,18 +8,19 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    // public function sendMessage(Request $request)
-    // {
-    //     $message = Message::create([
-    //         'user_id' => $request->user()->id,
-    //         'receiver_id' => $request->input('receiver_id'),
-    //         'message' => $request->input('message')
-    //     ]);
+    public function sendMessage(Request $request)
+    {
+        $message = Message::create([
+            'user_id' => $request->user()->id,
+            'receiver_id' => $request->input('receiver_id'),
+            'message' => $request->input('message')
+        ]);
 
-    //     broadcast(new MessageSent($message))->toOthers();
+        $channel = 'private-chat.' . $request->input('receiver_id');
+        broadcast(new MessageSent($message, $channel))->toOthers();
 
-    //     return response()->json(['status' => 'Message Sent!', 'message' => $message]);
-    // }
+        return response()->json(['status' => 'Message Sent!', 'message' => $message]);
+    }
 
     public function sendGroupMessage(Request $request)
     {
@@ -29,15 +30,16 @@ class MessageController extends Controller
             'message' => $request->input('message')
         ]);
 
-        broadcast(new MessageSent($message))->toOthers();
+        $channel = 'group-chat.' . $request->input('group_id');
+        broadcast(new MessageSent($message, $channel))->toOthers();
 
         return response()->json(['status' => 'Message Sent!', 'message' => $message]);
     }
 
-    public function getMessages(Request $request)
+
+    public function getMessages(Request $request , $receiverId)
     {
         $userId = $request->user()->id;
-        $receiverId = $request->input('receiver_id');
 
         $messages = Message::where(function($query) use ($userId, $receiverId) {
             $query->where('user_id', $userId)
@@ -50,20 +52,11 @@ class MessageController extends Controller
         return response()->json($messages);
     }
 
-    public function getGroupMessages(Request $request)
+    public function getGroupMessages(Request $request , $groupId)
     {
-        $groupId = $request->input('group_id');
-
         $messages = Message::where('group_id', $groupId)->get();
 
         return response()->json($messages);
-    }
-
-    public function sendMessage(Request $request)
-    {
-        $message = $request->input('message');
-        event(new MessageSent($message));
-        return response()->json(['status' => 'Message Sent!']);
     }
 
 }

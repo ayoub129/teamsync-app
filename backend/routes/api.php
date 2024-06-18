@@ -57,11 +57,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // send message
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     // // send group message
-    // Route::post('/send-group-message', [MessageController::class, 'sendGroupMessage']);
+    Route::post('/send-group-message', [MessageController::class, 'sendGroupMessage']);
     // get message
-    Route::get('/messages', [MessageController::class, 'getMessages']);
+    Route::get('/messages/{id}', [MessageController::class, 'getMessages']);
     // get group message
-    Route::get('/group-messages', [MessageController::class, 'getGroupMessages']);
+    Route::get('/group-messages/{id}', [MessageController::class, 'getGroupMessages']);
     // // getFriendsAndGroups
     Route::get('/friends-groups', [FriendRequestController::class, 'getFriendsAndGroups']);
 
