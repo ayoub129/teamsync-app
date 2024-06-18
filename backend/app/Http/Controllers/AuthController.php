@@ -106,7 +106,7 @@ class AuthController extends Controller
             $file = $user->files()->latest()->first();
             $imageUrl = asset('storage/' . $file->path);
         } else {
-            return response()->json(['error' => 'Image Not Found'], 400);
+            return response()->json(['error' => 'Image Not Found'], 202);
         }
 
         return response()->json(['image' => $imageUrl], 200);
