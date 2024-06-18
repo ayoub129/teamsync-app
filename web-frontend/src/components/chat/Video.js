@@ -49,7 +49,7 @@ const Video = () => {
         }}
         onReadyToClose={handleLeave} 
       />
-      {isAdmin && <div className="admin-message">You are the creator of this video chat</div>}
+      {isAdmin && <p className="admin-message">You are the creator of this video chat</p>}
     </div>
   );
 };
