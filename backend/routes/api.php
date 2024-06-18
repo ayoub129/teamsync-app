@@ -55,7 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* Routes for chat */
     // send message
-    // Route::post('/send-message', [MessageController::class, 'sendMessage']);
+    Route::post('/send-message', [MessageController::class, 'sendMessage']);
     // // send group message
     // Route::post('/send-group-message', [MessageController::class, 'sendGroupMessage']);
     // get message

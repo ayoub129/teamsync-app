@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Modal from 'react-modal';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import axios from 'axios';
+import axios from '../../axios';
 import AsyncSelect from 'react-select/async';
 import { AppContext } from '../../context/AppContext';
 import Input from '../ui/Input';
