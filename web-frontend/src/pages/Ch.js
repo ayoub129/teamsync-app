@@ -5,26 +5,36 @@ import Pusher from 'pusher-js';
 
 function Ch() {
     useEffect(() => {
-        window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: process.env.REACT_APP_PUSHER_KEY,
-            cluster: 'eu',
-            forceTLS: true
-        });
+        if (!window.Echo) {
+            window.Echo = new Echo({
+                broadcaster: 'pusher',
+                key: process.env.REACT_APP_PUSHER_KEY,
+                cluster: 'eu',
+                forceTLS: true
+            });
+        }
 
-        // Log the Echo instance to check its properties
         console.log('Echo instance:', window.Echo);
 
-        const channel = window.Echo.channel('chat')
-            .listen('MessageSent', (data) => {
+        const channel = window.Echo.channel('chat');
+        console.log('Channel instance:', channel);
+        console.log('Available methods on channel:', Object.keys(channel));
+
+        if (typeof channel.listen === 'function') {
+            channel.listen('MessageSent', (data) => {
                 console.log('Message received: ', data);
                 setMessages((prevMessages) => [...prevMessages, data.message]);
             });
+        } else {
+            console.error('listen method is not available on channel');
+        }
 
         // Cleanup listener on component unmount
         return () => {
             console.log('Stopping Echo listener');
-            channel.stopListening('MessageSent');
+            if (window.Echo && typeof window.Echo.leaveChannel === 'function') {
+                window.Echo.leaveChannel('chat');
+            }
         };
     }, []);
 
