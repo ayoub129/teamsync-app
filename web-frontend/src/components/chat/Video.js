@@ -36,6 +36,7 @@ const Video = () => {
         getIFrameRef = { node => node.style.height = '800px' }
         configOverwrite={{
           prejoinPageEnabled: false, 
+          disableModeratorIndicator: true,
         //   startWithAudioMuted: true,
         //   startWithVideoMuted: true,
         }}
