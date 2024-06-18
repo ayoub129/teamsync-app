@@ -6,28 +6,33 @@ function Ch() {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
 
-    const getMessages = () => {
-        window.Echo.channel('chat')
-        .listen('MessageSent', (e) => {
-            console.log(e)
-            setMessages([...messages, e.message]);
-        });
-
-    }
-
     useEffect(() => {
-        getMessages()
-    }, [messages]);
+        console.log('Setting up Echo listener');
+        const channel = window.Echo.channel('chat')
+            .listen('MessageSent', (e) => {
+                console.log('Message received: ', e.message);
+                setMessages((prevMessages) => [...prevMessages, e.message]);
+            });
+
+        // Cleanup listener on component unmount
+        return () => {
+            console.log('Stopping Echo listener');
+            channel.stopListening('MessageSent');
+        };
+    }, []);
 
     const sendMessage = async () => {
-        await axios.post('/send-message', { message } , {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        );
-        getMessages()
-        setMessage('');
+        console.log('Sending message:', message);
+        try {
+            await axios.post('/send-message', { message }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setMessage('');
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     };
 
     return (
