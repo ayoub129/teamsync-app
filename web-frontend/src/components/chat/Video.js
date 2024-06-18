@@ -199,7 +199,7 @@ const Video = () => {
                     subject: 'lalalala',
                     hideConferenceSubject: false
                 }}
-                lang = 'de'
+                lang = 'en'
                 onApiReady = { externalApi => handleApiReady(externalApi) }
                 onReadyToClose = { handleReadyToClose }
                 getIFrameRef = { handleJitsiIFrameRef1 } />
