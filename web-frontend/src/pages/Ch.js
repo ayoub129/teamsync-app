@@ -5,14 +5,23 @@ import Pusher from 'pusher-js';
 
 function Ch() {
     useEffect(() => {
-        if (!window.Echo) {
-            window.Echo = new Echo({
-                broadcaster: 'pusher',
-                key: process.env.REACT_APP_PUSHER_KEY,
-                cluster: 'eu',
-                forceTLS: true
-            });
-        }
+        // Ensure Pusher is available globally
+        window.Pusher = Pusher;
+
+        // Reinitialize Echo instance
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.REACT_APP_PUSHER_KEY,
+            cluster: 'eu',
+            forceTLS: true,
+            encrypted: true, // Add other Pusher options here
+            authEndpoint: '/broadcasting/auth',
+            auth: {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+        });
 
         console.log('Echo instance:', window.Echo);
 
