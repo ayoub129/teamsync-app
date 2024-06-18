@@ -21,24 +21,15 @@ const Video = () => {
 
   const handleLeave = async () => {
     if (isAdmin) {
-      try {
-        await axios.post(`/video-chat/archive/${id}`, {}, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        navigate("/");
-      } catch (error) {
-        console.error('Error archiving video chat:', error);
-      }
+      navigate("/");
     }
   };
 
   return (
     <div ref={jitsiContainer} id='video-container' className='my-12 mx-4 md:mx-8 md:ml-[19%] h-[75vh] w-[80%]'>
       <JitsiMeeting
-        domain="meet.jit.si" 
         roomName={id}
+        getIFrameRef = { node => node.style.height = '800px' }
         configOverwrite={{
           prejoinPageEnabled: false, 
           startWithAudioMuted: true,
