@@ -8,7 +8,6 @@ const Video = () => {
   const jitsiContainer = useRef(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [roomName, setRoomName] = useState('');
-  const domain = "8x8.vc";
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,7 +43,6 @@ const Video = () => {
           displayName: localStorage.getItem('username'), 
         }}
         lang='en'
-        domain={domain}
         onReadyToClose={handleLeave} 
       />
       {isAdmin && <p className="admin-message">You are the creator of this video chat</p>}
