@@ -9,6 +9,7 @@ function Ch() {
     useEffect(() => {
         window.Echo.channel('chat')
             .listen('MessageSent', (e) => {
+                console.log(e)
                 setMessages([...messages, e.message]);
             });
     }, [messages]);
