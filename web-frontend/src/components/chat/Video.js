@@ -34,11 +34,11 @@ const Video = () => {
       <JitsiMeeting
         roomName={roomName}
         getIFrameRef = { node => node.style.height = '800px' }
-        // configOverwrite={{
-        //   prejoinPageEnabled: false, 
+        configOverwrite={{
+          prejoinPageEnabled: false, 
         //   startWithAudioMuted: true,
         //   startWithVideoMuted: true,
-        // }}
+        }}
         userInfo={{
           displayName: localStorage.getItem('username'), 
         }}
