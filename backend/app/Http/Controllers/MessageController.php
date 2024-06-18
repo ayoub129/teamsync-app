@@ -62,7 +62,7 @@ class MessageController extends Controller
     public function sendMessage(Request $request)
     {
         $message = $request->input('message');
-        broadcast(new MessageSent($message))->toOthers();
+        event(new MessageSent($message));
         return response()->json(['status' => 'Message Sent!']);
     }
 

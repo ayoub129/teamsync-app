@@ -2,14 +2,14 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Queue\SerializesModels;
 
 class MessageSent implements ShouldBroadcast
 {
-    use InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
 
@@ -17,9 +17,15 @@ class MessageSent implements ShouldBroadcast
     {
         $this->message = $message;
     }
-
+  
     public function broadcastOn()
     {
-        return new Channel('chat');
+        return ['chat'];
     }
+  
+    public function broadcastAs()
+    {
+        return 'MessageSent';
+    }
+  
 }

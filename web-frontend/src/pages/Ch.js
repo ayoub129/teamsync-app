@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../axios';
-import '../echo';
+import Echo from 'laravel-echo'
 
 function Ch() {
-    const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState('');
-
-    useEffect(() => {
-        console.log('Setting up Echo listener');
-        const channel = window.Echo.channel('chat')
-            .listen('MessageSent', (e) => {
-                console.log('Message received: ', e.message);
-                setMessages((prevMessages) => [...prevMessages, e.message]);
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: process.env.REACT_APP_PUSHER_KEY,
+        cluster: 'eu',
+        forceTLS: true
+      });
+      
+      
+      const [messages, setMessages] = useState([]);
+      const [message, setMessage] = useState('');
+      
+      useEffect(() => {
+          console.log('Setting up Echo listener');
+        const channel = Echo.channel('chat')
+            .listen('MessageSent', (data) => {
+                console.log('Message received: ', data);
+                setMessages((prevMessages) => [...prevMessages, data.message]);
             });
 
         // Cleanup listener on component unmount
