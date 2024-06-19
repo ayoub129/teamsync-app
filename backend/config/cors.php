@@ -6,7 +6,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://100.24.72.90', 'http://100.24.72.90:3000'],
+    'allowed_origins' => ['http://100.24.72.90', 'http://ec2-100-24-72-90.compute-1.amazonaws.com'],
 
     'allowed_origins_patterns' => [],
 
