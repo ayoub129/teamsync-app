@@ -58,9 +58,17 @@ const Video = () => {
             node.style.height = '800px';
           }
         }}
-        configOverwrite={{
+        configOverwrite = {{
           prejoinPageEnabled: false,
           disableModeratorIndicator: true,
+          disableThirdPartyRequests: true,
+          disableLocalVideoFlip: true,
+          backgroundAlpha: 0.5
+        }}
+        interfaceConfigOverwrite = {{
+            VIDEO_LAYOUT_FIT: 'nocrop',
+            MOBILE_APP_PROMO: false,
+            TILE_VIEW_MAX_COLUMNS: 4
         }}
         userInfo={{
           displayName: localStorage.getItem('username'),
