@@ -90,7 +90,6 @@ const Chat = () => {
     if (newMessage.trim() === '') return;
 
     try {
-      if ('image' in selectedFriendOrGroup) {
         const response = await axios.post('/send-message', {
           receiver_id: selectedFriendOrGroup.id,
           message: newMessage,
@@ -101,18 +100,7 @@ const Chat = () => {
         });
         setMessages((prevMessages) => [...prevMessages, response.data.message]);
         setNewMessage('');
-      }else {
-        const response = await axios.post('/send-group-message', {
-          group_id: selectedFriendOrGroup.id,
-          message: newMessage,
-        }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        setMessages((prevMessages) => [...prevMessages, response.data.message]);
-        setNewMessage('');
-      }
+
     } catch (error) {
       console.error('Error sending message:', error);
     }

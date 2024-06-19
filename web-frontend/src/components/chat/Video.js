@@ -8,7 +8,6 @@ const Video = () => {
   const jitsiContainer = useRef(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [roomName, setRoomName] = useState('');
-  const [mediaSupported, setMediaSupported] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -23,20 +22,6 @@ const Video = () => {
     const randomNum = Math.floor(Math.random() * 1000);
     setRoomName(`${randomNum}-${id}`);
 
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-          console.log('Access to media devices granted');
-          setMediaSupported(true);
-          // Optionally stop the stream immediately as it's just a test
-          stream.getTracks().forEach(track => track.stop());
-        })
-        .catch(error => {
-          console.error('Error accessing media devices:', error);
-        });
-    } else {
-      console.error('getUserMedia is not supported in this browser');
-    }
   }, [navigate, id]);
 
   const handleLeave = () => {
@@ -44,10 +29,6 @@ const Video = () => {
       navigate("/");
     }
   };
-
-  if (!mediaSupported) {
-    return <p>Your browser does not support media devices or permission was denied.</p>;
-  }
 
   return (
     <div ref={jitsiContainer} id='video-container' className='my-12 mx-4 md:mx-8 md:ml-[19%] h-[75vh] w-[80%]'>

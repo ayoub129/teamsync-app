@@ -16,7 +16,7 @@ const FriendsList = ({ friends, groups, onSelectFriendOrGroup }) => {
           </div>
         </div>
       ))}
-      <h2 className='text-xl font-semibold mb-4'>Groups</h2>
+      {/* <h2 className='text-xl font-semibold mb-4'>Groups</h2>
       {groups && groups.map(group => (
         <div
           key={group.id}
@@ -27,7 +27,7 @@ const FriendsList = ({ friends, groups, onSelectFriendOrGroup }) => {
             <span>{group.name}</span>
           </div>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 };
