@@ -5,6 +5,7 @@ import '../echo';
 const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         window.Echo.channel('user.' + userId)
@@ -19,7 +20,7 @@ const Chat = () => {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        await api.post('/send-message', { message, receiver_id: receiverId, group_id: groupId });
+        await api.post('/send-message', { message, receiver_id: 1, group_id: 1 });
         setMessage('');
     };
 
