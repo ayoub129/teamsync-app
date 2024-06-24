@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../axios';
 import '../echo';
-// import Pusher from 'pusher-js';
+import Pusher from 'pusher-js/types/src/core/pusher';
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
