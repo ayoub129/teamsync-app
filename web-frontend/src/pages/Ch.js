@@ -10,6 +10,7 @@ const Chat = () => {
     useEffect(() => {
         window.Echo.channel('user.' + userId)
             .listen('MessageSent', (e) => {
+                console.log(e)
                 setMessages([...messages, e.message]);
             });
 
