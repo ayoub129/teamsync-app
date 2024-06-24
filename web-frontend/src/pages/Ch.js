@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import api from '../axios';
 import '../echo';
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage]  = useState('');
-    const userId = localStorage.getItem('userId');
+    // const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         Pusher.logToConsole = true;
