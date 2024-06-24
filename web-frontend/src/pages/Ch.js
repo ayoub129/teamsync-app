@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import api from '../axios';
 import '../echo';
+import Pusher from 'pusher-js';
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState('');
+    const [message, setMessage]  = useState('');
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
-        console.log(window.Echo)
-        window.Echo.channel('user.' + userId)
-            .listen('MessageSent', (e) => {
-                setMessages([...messages, e.message]);
-            });
+        Pusher.logToConsole = true;
+        let pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
+            cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER
+        });
 
-        return () => {
-            window.Echo.leaveChannel('user.' + userId);
-        };
-    }, [messages]);
+        let channel = pusher.subscribe('chat');
+        channel.bind('message', (data) => {
+            setMessages([...messages, data]);
+        });
+    })
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        await api.post('/send-message', { message, receiver_id: 7 } , {
+        await api.post('/message', { message } , {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }

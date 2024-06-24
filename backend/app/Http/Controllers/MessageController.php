@@ -2,26 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Message as EventsMessage;
 use App\Events\MessageSent;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function sendMessage(Request $request)
+    public function message(Request $request)
     {
-        $message = new Message([
-            'user_id' => auth()->id(),
-            'receiver_id' => $request->receiver_id,
-            'group_id' => $request->group_id,
-            'message' => $request->message,
-        ]);
-    
-        broadcast(new MessageSent($message));
-    
-        $message->save();
-    
-        return response()->json(['status' => 'Message Sent!']);
+        event(new EventsMessage($request->user()->id , $request->input('message')));
+        return [];
     }
 
     public function sendGroupMessage(Request $request)
