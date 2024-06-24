@@ -8,9 +8,9 @@ const Chat = () => {
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
+        console.log(window.Echo)
         window.Echo.channel('user.' + userId)
             .listen('MessageSent', (e) => {
-                console.log(e)
                 setMessages([...messages, e.message]);
             });
 
