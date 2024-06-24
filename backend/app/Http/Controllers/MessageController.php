@@ -10,16 +10,18 @@ class MessageController extends Controller
 {
     public function sendMessage(Request $request)
     {
-        $message = Message::create([
-            'user_id' => $request->user()->id,
-            'receiver_id' => $request->input('receiver_id'),
-            'message' => $request->input('message')
+        $message = new Message([
+            'user_id' => auth()->id(),
+            'receiver_id' => $request->receiver_id,
+            'group_id' => $request->group_id,
+            'message' => $request->message,
         ]);
-
-        $channel = 'private-chat.' . $request->input('receiver_id');
-        broadcast(new MessageSent($message, $channel))->toOthers();
-
-        return response()->json(['status' => 'Message Sent!', 'message' => $message]);
+    
+        broadcast(new MessageSent($message));
+    
+        $message->save();
+    
+        return response()->json(['status' => 'Message Sent!']);
     }
 
     public function sendGroupMessage(Request $request)

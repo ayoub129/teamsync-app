@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "jenkins_sg" {
-  name        = "jenkins_sg"
+  name        = "jenkins_sg_1"
   description = "Security group for Jenkins instance"
 
   ingress = [

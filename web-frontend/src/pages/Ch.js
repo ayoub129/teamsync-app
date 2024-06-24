@@ -1,49 +1,45 @@
-import React, {  useState } from 'react';
-import axios from '../axios';
-// import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
+import React, { useEffect, useState } from 'react';
+import api from '../axios';
+import '../echo';
 
-function Ch() {
-    Pusher.logToConsole = true;
-    var pusher = new Pusher('c792b64a837850229f3a', {
-        cluster: 'eu'
-      });
-  
-    var channel = pusher.subscribe('chat');
-    channel.bind('MessageSent', function(data) {
-        console.log(JSON.stringify(data));
-    });
-  
+const Chat = () => {
+    const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
 
-    const sendMessage = async () => {
-        try {
-            await axios.post('/send-message', { message }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+    useEffect(() => {
+        window.Echo.channel('user.' + userId)
+            .listen('MessageSent', (e) => {
+                setMessages([...messages, e.message]);
             });
-            setMessage('');
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
+
+        return () => {
+            window.Echo.leaveChannel('user.' + userId);
+        };
+    }, [messages]);
+
+    const sendMessage = async (e) => {
+        e.preventDefault();
+        await api.post('/send-message', { message, receiver_id: receiverId, group_id: groupId });
+        setMessage('');
     };
 
     return (
         <div>
             <div className="messages">
-                {/* {messages.map((msg, index) => (
-                    <div key={index}>{msg}</div>
-                ))} */}
+                {messages.map((msg, index) => (
+                    <div key={index}>{msg.message}</div>
+                ))}
             </div>
-            <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-            <button onClick={sendMessage}>Send</button>
+            <form onSubmit={sendMessage}>
+                <input 
+                    type="text" 
+                    value={message} 
+                    onChange={(e) => setMessage(e.target.value)} 
+                />
+                <button type="submit">Send</button>
+            </form>
         </div>
     );
-}
+};
 
-export default Ch;
+export default Chat;
