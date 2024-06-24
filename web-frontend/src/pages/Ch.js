@@ -20,7 +20,7 @@ const Chat = () => {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        await api.post('/send-message', { message, receiver_id: 1 } , {
+        await api.post('/send-message', { message, receiver_id: 7 } , {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
