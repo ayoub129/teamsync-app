@@ -15,8 +15,7 @@ const Ch = () => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            const data = await response.json();
-            setUsers(data.users);
+            setUsers(response.data.friends);
         };
 
         fetchUsers();
