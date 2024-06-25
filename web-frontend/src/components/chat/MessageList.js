@@ -39,7 +39,7 @@ const MessageList = ({ receiverId, groupId }) => {
         <div>
             {messages.map((message) => (
                 <div key={message.id}>
-                    {/* <strong>{message.user.name}:</strong> {message.message} */}
+                   {message.message}
                 </div>
             ))}
         </div>

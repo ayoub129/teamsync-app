@@ -6,7 +6,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://18.204.6.186/', 'http://18.204.6.186'],
+    'allowed_origins' => ['http://18.204.6.186/', 'http://18.204.6.186', 'http://18.204.6.186:3000'],
 
     'allowed_origins_patterns' => [],
 
