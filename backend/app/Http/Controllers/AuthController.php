@@ -42,28 +42,23 @@ class AuthController extends Controller
             'password' => 'required|confirmed|string|min:8',
         ]);
 
-        $ldapUser = LdapUser::findByOrFail('mail', $request->email);
+        try {
+            // Check if user exists in LDAP
+            $ldapUser = LdapUser::findByOrFail('mail', $request->email);
 
-        if ($ldapUser) {
             return response()->json(['message' => 'User already exists in LDAP'], 409);
+        } catch (\Exception $e) {
+
+            $localUser = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            
+            $token = $localUser->createToken('auth_token')->plainTextToken;
+            
+            return response()->json(['user' => $localUser, 'token' => $token], 201);
         }
-
-        // Register user in LDAP and local database
-        $user = new LdapUser;
-        $user->cn = $request->name;
-        $user->mail = $request->email;
-        $user->userPassword = Hash::make($request->password);
-        $user->save();
-
-        $localUser = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $token = $localUser->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['user' => $localUser, 'token' => $token], 201);
     }
 
     // Update user details
