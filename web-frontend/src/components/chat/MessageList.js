@@ -19,6 +19,7 @@ const MessageList = ({ receiverId, groupId }) => {
                 }
             });
             setMessages(response.data.messages);
+            console.log(response.data.messages)
         };
 
         fetchMessages();
@@ -38,7 +39,7 @@ const MessageList = ({ receiverId, groupId }) => {
         <div>
             {messages.map((message) => (
                 <div key={message.id}>
-                    <strong>{message.user.name}:</strong> {message.message}
+                    {/* <strong>{message.user.name}:</strong> {message.message} */}
                 </div>
             ))}
         </div>
