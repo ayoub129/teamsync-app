@@ -13,7 +13,11 @@ const MessageList = ({ receiverId, groupId }) => {
             } else if (groupId) {
                 url = `/messages?group_id=${groupId}`;
             }
-            const response = await instance.get(url);
+            const response = await instance.get(url , {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             const data = await response.json();
             setMessages(data.messages);
         };

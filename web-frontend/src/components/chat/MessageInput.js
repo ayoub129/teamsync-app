@@ -6,12 +6,10 @@ const MessageInput = ({ receiverId, groupId }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload = { message };
-        if (receiverId) payload.receiver_id = receiverId;
-        if (groupId) payload.group_id = groupId;
-
         await instance.post('/messages', {
-            body: JSON.stringify(payload)
+            message: message,
+            receiver_id: receiverId,
+            group_id:  groupId
         },
         {
             headers: {
