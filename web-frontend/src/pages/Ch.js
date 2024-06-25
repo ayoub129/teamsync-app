@@ -10,7 +10,7 @@ const Ch = () => {
     // Fetch all users from the backend
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await instance.get('/users', {
+            const response = await instance.get('/friends', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
