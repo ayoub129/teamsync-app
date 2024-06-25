@@ -43,7 +43,6 @@ class AuthController extends Controller
         ]);
 
         try {
-            // Check if user exists in LDAP
             $ldapUser = LdapUser::findByOrFail('mail', $request->email);
 
             return response()->json(['message' => 'User already exists in LDAP'], 409);
