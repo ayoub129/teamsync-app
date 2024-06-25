@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\File;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
+
 
 class AuthController extends Controller
 {
@@ -40,17 +42,28 @@ class AuthController extends Controller
             'password' => 'required|confirmed|string|min:8',
         ]);
 
-        // Create user in local database
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
+        $ldapUser = LdapUser::findByOrFail('mail', $request->email);
+
+        if ($ldapUser) {
+            return response()->json(['message' => 'User already exists in LDAP'], 409);
+        }
+
+        // Register user in LDAP and local database
+        $user = new LdapUser;
+        $user->cn = $request->name;
+        $user->mail = $request->email;
+        $user->userPassword = Hash::make($request->password);
+        $user->save();
+
+        $localUser = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
-        // Generate authentication token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $localUser->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['user' => $user, 'token' => $token], 201);
+        return response()->json(['user' => $localUser, 'token' => $token], 201);
     }
 
     // Update user details
@@ -128,17 +141,34 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        // Try LDAP Authentication
+        try {
+            $ldapUser = LdapUser::findByOrFail('mail', $request->email);
+            if (Hash::check($request->password, $ldapUser->userPassword)) {
+                $localUser = User::firstOrCreate(['email' => $request->email], [
+                    'name' => $ldapUser->cn[0],
+                    'email' => $ldapUser->mail[0],
+                    'password' => Hash::make($request->password),
+                ]);
+
+                $token = $localUser->createToken('auth_token')->plainTextToken;
+
+                return response()->json(['user' => $localUser, 'token' => $token], 200);
+            }
+        } catch (\Exception $e) {
+            // If LDAP auth fails, try local database auth
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                return response()->json(['message' => 'Invalid credentials'], 401);
+            }
+
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json(['user' => $user, 'token' => $token], 200);
         }
-
-        $user = Auth::user();
-        $token = $user->createToken('AuthToken')->plainTextToken;
-
-        return response()->json(['user' => $user, 'token' => $token], 200);
     }
 }

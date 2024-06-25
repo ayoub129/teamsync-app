@@ -2,54 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Message as EventsMessage;
 use App\Events\MessageSent;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
-    public function message(Request $request)
+    // Send a message
+    public function sendMessage(Request $request)
     {
-        event(new EventsMessage($request->user()->id , $request->input('message')));
-        return [];
-    }
-
-    public function sendGroupMessage(Request $request)
-    {
-        $message = Message::create([
-            'user_id' => $request->user()->id,
-            'group_id' => $request->input('group_id'),
-            'message' => $request->input('message')
+        $request->validate([
+            'message' => 'required|string',
+            'receiver_id' => 'nullable|exists:users,id',
+            'group_id' => 'nullable|exists:groups,id',
         ]);
 
-        $channel = 'group-chat.' . $request->input('group_id');
+        $message = Message::create([
+            'user_id' => Auth::id(),
+            'receiver_id' => $request->receiver_id,
+            'group_id' => $request->group_id,
+            'message' => $request->message,
+        ]);
+
+        $channel = $request->group_id ? 'group-chat.' . $request->group_id : 'private-chat.' . $request->receiver_id;
         broadcast(new MessageSent($message, $channel))->toOthers();
 
-        return response()->json(['status' => 'Message Sent!', 'message' => $message]);
+        return response()->json(['message' => 'Message sent successfully', 'message' => $message], 201);
     }
 
-
-    public function getMessages(Request $request , $receiverId)
+    // Get messages
+    public function getMessages(Request $request)
     {
-        $userId = $request->user()->id;
+        $request->validate([
+            'receiver_id' => 'nullable|exists:users,id',
+            'group_id' => 'nullable|exists:groups,id',
+        ]);
 
-        $messages = Message::where(function($query) use ($userId, $receiverId) {
-            $query->where('user_id', $userId)
-                  ->where('receiver_id', $receiverId);
-        })->orWhere(function($query) use ($userId, $receiverId) {
-            $query->where('user_id', $receiverId)
-                  ->where('receiver_id', $userId);
-        })->get();
+        $query = Message::query();
 
-        return response()->json($messages);
+        if ($request->filled('receiver_id')) {
+            $query->where(function ($query) use ($request) {
+                $query->where('user_id', Auth::id())
+                    ->where('receiver_id', $request->receiver_id);
+            })->orWhere(function ($query) use ($request) {
+                $query->where('user_id', $request->receiver_id)
+                    ->where('receiver_id', Auth::id());
+            });
+        }
+
+        if ($request->filled('group_id')) {
+            $query->where('group_id', $request->group_id);
+        }
+
+        $messages = $query->get();
+
+        return response()->json(['messages' => $messages], 200);
     }
-
-    public function getGroupMessages(Request $request , $groupId)
-    {
-        $messages = Message::where('group_id', $groupId)->get();
-
-        return response()->json($messages);
-    }
-
 }

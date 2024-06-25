@@ -1,52 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import api from '../axios';
-import '../echo';
-import Pusher from 'pusher-js/types/src/core/pusher';
+import MessageList from '../components/chat/MessageList';
+import MessageInput from '../components/chat/MessageInput';
+import instance from '../axios'
 
-const Chat = () => {
-    const [messages, setMessages] = useState([]);
-    const [message, setMessage]  = useState('');
-    // const userId = localStorage.getItem('userId');
+const Ch = () => {
+    const [receiverId, setReceiverId] = useState(null);
+    const [users, setUsers] = useState([]);
 
+    // Fetch all users from the backend
     useEffect(() => {
-        Pusher.logToConsole = true;
-        let pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
-            cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER
-        });
+        const fetchUsers = async () => {
+            const response = await instance.get('/users', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+            setUsers(data.users);
+        };
 
-        let channel = pusher.subscribe('chat');
-        channel.bind('message', (data) => {
-            setMessages([...messages, data]);
-        });
-    })
-
-    const sendMessage = async (e) => {
-        e.preventDefault();
-        await api.post('/message', { message } , {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          });
-        setMessage('');
-    };
+        fetchUsers();
+    }, []);
 
     return (
         <div>
-            <div className="messages">
-                {messages.map((msg, index) => (
-                    <div key={index}>{msg.message}</div>
-                ))}
+            <h1>Chat Application</h1>
+            <div>
+                <label>Select User:</label>
+                <select
+                    value={receiverId || ''}
+                    onChange={(e) => setReceiverId(e.target.value)}
+                >
+                    <option value="" disabled>Select a user</option>
+                    {users.map((user) => (
+                        <option key={user.id} value={user.id}>
+                            {user.name}
+                        </option>
+                    ))}
+                </select>
             </div>
-            <form onSubmit={sendMessage}>
-                <input 
-                    type="text" 
-                    value={message} 
-                    onChange={(e) => setMessage(e.target.value)} 
-                />
-                <button type="submit">Send</button>
-            </form>
+            {receiverId && (
+                <>
+                    <MessageList receiverId={receiverId} groupId={null} />
+                    <MessageInput receiverId={receiverId} groupId={null} />
+                </>
+            )}
         </div>
     );
 };
 
-export default Chat;
+export default Ch;
