@@ -18,8 +18,7 @@ const MessageList = ({ receiverId, groupId }) => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            const data = await response.json();
-            setMessages(data.messages);
+            setMessages(response.data.messages);
         };
 
         fetchMessages();
