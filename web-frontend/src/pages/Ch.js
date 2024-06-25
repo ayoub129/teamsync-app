@@ -16,6 +16,7 @@ const Ch = () => {
                 }
             });
             setUsers(response.data.friends);
+            console.log(response.data.friends)
         };
 
         fetchUsers();
