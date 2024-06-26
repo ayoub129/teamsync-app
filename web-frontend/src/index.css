@@ -20,6 +20,7 @@
 }
 
 .discussion-modal {
+    z-index: 1000;
     position: relative;
     overflow-y: scroll;
     width: 75%;

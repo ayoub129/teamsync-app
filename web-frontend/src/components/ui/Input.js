@@ -8,7 +8,7 @@ const Input = ({Style, label, id, handleChange, order , text = '', placeholder =
       {bigInput ? (
         <textarea rows={6} className='block w-full outline-0 p-[.5rem] border border-[#b3b3b3] focus:border-2 focus:border-[#2684ff] rounded mt-4' id={id} placeholder={placeholder} onChange={handleChange} value={text} />
       ) : (
-        <input className={`block ${type === "checkbox" ? "" : "w-full mt-4"} outline-0 p-[.5rem] border border-[#b3b3b3] focus:border-2 focus:border-[#2684ff] rounded `} type={type} id={id} placeholder={placeholder} value={text} onChange={handleChange} />
+        <input className={`block w-full ${type === "checkbox" ? "" : "w-full mt-4"} outline-0 p-[.5rem] border border-[#b3b3b3] focus:border-2 focus:border-[#2684ff] rounded `} type={type} id={id} placeholder={placeholder} value={text} onChange={handleChange} />
       )}
     </div>
   );
