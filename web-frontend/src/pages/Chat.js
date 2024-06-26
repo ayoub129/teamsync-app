@@ -81,7 +81,7 @@ const Chat = () => {
 
       echo.channel(channelName)
           .listen('MessageSent', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data.message]);
+            setMessages((prevMessages) => [...prevMessages, data.messages]);
           });
 
       return () => {
@@ -96,13 +96,13 @@ const Chat = () => {
     try {
       const response = await axios.post('/send-message', {
         receiver_id: selectedFriendOrGroup.id,
-        message: newMessage,
+        messages: newMessage,
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setMessages((prevMessages) => [...prevMessages, response.data.message]);
+      setMessages((prevMessages) => [...prevMessages, response.data.messages]);
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
