@@ -83,6 +83,8 @@ const Chat = () => {
           .listen('MessageSent', (data) => {
             setMessages((prevMessages) => [...prevMessages, data.message]);
           });
+      
+      console.log(echo)
 
       return () => {
         echo.leaveChannel(channelName);
