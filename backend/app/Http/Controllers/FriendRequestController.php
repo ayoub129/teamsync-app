@@ -63,8 +63,12 @@ class FriendRequestController extends Controller
             $users = User::where('id', '!=', $user->id)->get();
             return response()->json(['friends' => $users], 200);
         } else {
+            $admins = User::where('is_admin', true)->get();
             $friends = $user->friends;
-            return response()->json(['friends' => $friends], 200);
+            $allFriends = $friends->merge($admins);
+            $allFriends = $allFriends->unique('id');
+
+            return response()->json(['friends' => $allFriends], 200);
         }
     }
 
