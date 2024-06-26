@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from '../../axios'; 
+import axios from '../../axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '../ui/Button';
 import Filters from '../ui/Filters';
@@ -21,6 +21,8 @@ const SingleChannel = () => {
   const [deleting, setDeleting] = useState(false);
   const [joining, setJoining] = useState(false);
   const [leaving, setLeaving] = useState(false);
+  const [discussionToDelete, setDiscussionToDelete] = useState(null);
+  const [showDeleteChannelModal, setShowDeleteChannelModal] = useState(false);
   const userId = localStorage.getItem('user_id');
   const { toasts, showToast } = useCustomToast();
   const navigate = useNavigate();
@@ -232,17 +234,51 @@ const SingleChannel = () => {
     }
   };
 
-  const handleDeleteClick = () => {
-    setShowModal(true);
+  const deleteDiscussion = async (discussionId) => {
+    setDeleting(true);
+    try {
+      await axios.delete(`/discussions/${discussionId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      showToast('Discussion deleted successfully!', 'success');
+      // Refresh the discussions list
+      fetchDiscussions();
+    } catch (error) {
+      console.error('Error deleting discussion:', error.response ? error.response.data : error.message);
+      showToast('Error deleting discussion', 'error');
+    } finally {
+      setDeleting(false);
+    }
   };
 
-  const handleConfirmDelete = () => {
+  const handleDeleteDiscussionClick = (discussionId) => {
+    setDiscussionToDelete(discussionId);
+    setShowModal(true); // Show the modal when delete button is clicked
+  };
+
+  const handleConfirmDeleteDiscussion = () => {
     setShowModal(false);
+    deleteDiscussion(discussionToDelete);
+  };
+
+  const handleCancelDeleteDiscussion = () => {
+    setShowModal(false);
+    setDiscussionToDelete(null);
+  };
+
+  const handleDeleteChannelClick = () => {
+    setShowDeleteChannelModal(true); // Show the modal when delete button is clicked
+  };
+
+  const handleConfirmDeleteChannel = () => {
+    setShowDeleteChannelModal(false);
     deleteChannel();
   };
 
-  const handleCancelDelete = () => {
-    setShowModal(false);
+  const handleCancelDeleteChannel = () => {
+    setShowDeleteChannelModal(false);
   };
 
   const edit = () => {
@@ -261,7 +297,7 @@ const SingleChannel = () => {
         <Loader />
       ) : (
         <>
-          <Filters onSearch={handleSearch}  />
+          <Filters onSearch={handleSearch} />
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div className="col-span-2">
               {channel && (
@@ -283,7 +319,7 @@ const SingleChannel = () => {
                           <Button handlePress={edit}>
                             <i className='fas fa-pen text-yellow-500'></i>
                           </Button>
-                          <Button handlePress={handleDeleteClick}>
+                          <Button handlePress={handleDeleteChannelClick}>
                             <i className='fas fa-trash-can text-red-500'></i>
                           </Button>
                         </>
@@ -303,8 +339,15 @@ const SingleChannel = () => {
               )}
               <div className="mt-8">
                 {discussions.map((discussion) => (
-                  <div key={discussion.id} className="mb-4 p-4 border rounded bg-white shadow">
-                    <h2 className="text-xl font-semibold">{discussion.title}</h2>
+                  <div key={discussion.id} className="mb-4 p-4 bg-white shadow rounded">
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-xl font-semibold">{discussion.title}</h2>
+                      {parseInt(userId) === discussion.user_id && (
+                        <Button handlePress={() => handleDeleteDiscussionClick(discussion.id)}>
+                          <i className='fas fa-trash-can text-red-500'></i>
+                        </Button>
+                      )}
+                    </div>
                     <div className='my-5'>{getExcerpt(discussion.content)} <Link className='text-red-500' to={`/discussion/${discussion.id}`}>Read More ...</Link></div>
                     <p className="text-sm text-gray-500">{new Date(discussion.created_at).toLocaleString()}</p>
                   </div>
@@ -326,16 +369,23 @@ const SingleChannel = () => {
       )}
       {showModal && (
         <ConfirmationModal
+          message="Are you sure you want to delete this discussion?"
+          onConfirm={handleConfirmDeleteDiscussion}
+          onCancel={handleCancelDeleteDiscussion}
+        />
+      )}
+      {showDeleteChannelModal && (
+        <ConfirmationModal
           message="Are you sure you want to delete this channel?"
-          onConfirm={handleConfirmDelete}
-          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDeleteChannel}
+          onCancel={handleCancelDeleteChannel}
         />
       )}
       {deleting && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-black opacity-50 absolute inset-0"></div>
           <div className="bg-white p-8 rounded shadow-lg z-10">
-            <p>Deleting channel...</p>
+            <p>Deleting...</p>
           </div>
         </div>
       )}

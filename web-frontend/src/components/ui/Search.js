@@ -28,17 +28,17 @@ const Search = () => {
           <button type='submit'>
             <i className="fas fa-search absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-600 cursor-pointer"></i>
           </button>
-        </div>
-        <div className="absolute right-0 md:right-[-2rem] ml-2">
-          <select
-            value={searchCategory}
-            onChange={(e) => setSearchCategory(e.target.value)}
-            className="py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
-          >
-            <option value="discussion">Discussions</option>
-            <option value="groups">Groups</option>
-            <option value="channels">Channels</option>
-          </select>
+          <div className="absolute right-0 md:right-[-2rem] ml-2">
+            <select
+              value={searchCategory}
+              onChange={(e) => setSearchCategory(e.target.value)}
+              className="py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
+            >
+              <option value="discussion">Discussions</option>
+              <option value="groups">Groups</option>
+              <option value="channels">Channels</option>
+            </select>
+          </div>
         </div>
       </form>
     </div>

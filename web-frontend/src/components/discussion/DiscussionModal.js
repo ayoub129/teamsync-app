@@ -108,7 +108,7 @@ const DiscussionModal = ({ isOpen, onRequestClose }) => {
       onRequestClose={onRequestClose}
       ariaHideApp={false}
       contentLabel="Create Discussion"
-      className="discussion-modal"
+      className="discussion-modal z-50"
       overlayClassName="discussion-modal-overlay"
     >
       <div className="discussion-modal-header">

@@ -284,7 +284,7 @@ const SingleGroup = () => {
           )}
             <div className="mt-8">
               {discussions.map((discussion) => (
-                <div key={discussion.id} className="mb-4 p-4 border rounded bg-white shadow-lg">
+                <div key={discussion.id} className="mb-4 p-4 bg-white shadow rounded">
                   <div className="flex justify-between items-center">
                     <div className='w-full'>
                     <div className="flex justify-between items-center">
