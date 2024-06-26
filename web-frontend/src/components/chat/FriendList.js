@@ -2,7 +2,7 @@ import React from 'react';
 
 const FriendsList = ({ friends, groups, onSelectFriendOrGroup }) => {
   return (
-    <div className="w-1/3 p-4 bg-white shadow-lg h-[80%] overflow-y-scroll">
+    <div className="w-full md:w-1/3 p-4 bg-white shadow-lg h-[80%] overflow-y-scroll">
       <h2 className='text-xl font-semibold mb-4'>Friends</h2>
       {friends && friends.map(friend => (
         <div
@@ -16,7 +16,7 @@ const FriendsList = ({ friends, groups, onSelectFriendOrGroup }) => {
           </div>
         </div>
       ))}
-      {/* <h2 className='text-xl font-semibold mb-4'>Groups</h2>
+      <h2 className='text-xl font-semibold mb-4'>Groups</h2>
       {groups && groups.map(group => (
         <div
           key={group.id}
@@ -27,7 +27,7 @@ const FriendsList = ({ friends, groups, onSelectFriendOrGroup }) => {
             <span>{group.name}</span>
           </div>
         </div>
-      ))} */}
+      ))}
     </div>
   );
 };

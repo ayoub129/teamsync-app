@@ -75,7 +75,7 @@ const Notification = () => {
           friendRequests.map(request => (
             <div key={request.id} className="flex items-center justify-between p-2 mb-2 bg-white rounded shadow">
               <div className="flex items-center">
-                <img src={request.sender.image} alt={request.sender.name} className="w-10 h-10 rounded-full mr-3" />
+                <img src={request.sender.image ? request.sender.image : 'https://via.placeholder.com/40'} alt={request.sender.name} className="w-10 h-10 rounded-full mr-3" />
                 <span>{request.sender.name}</span>
               </div>
               <Button 

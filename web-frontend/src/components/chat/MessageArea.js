@@ -4,7 +4,7 @@ const MessageArea = ({ messages, onSendMessage, newMessage, setNewMessage }) => 
   console.log(messages)
   console.log(newMessage)
   return (
-    <div className="w-2/3 p-4 bg-white shadow-lg flex flex-col h-[80%] overflow-y-scroll">
+    <div className="w-full md:w-2/3 p-4 bg-white shadow-lg flex flex-col h-[80%] overflow-y-scroll">
       <div className="flex-grow overflow-y-auto mb-4">
         {messages && messages.map((message) => (
           <div
