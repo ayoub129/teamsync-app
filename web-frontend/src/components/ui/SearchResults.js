@@ -38,7 +38,7 @@ const SearchResults = () => {
   }
 
   return (
-    <div className="md:ml-[19%] mx-8 p-8">
+    <div className="md:ml-[19%] mx-4 md:mx-8 md:p-8">
       <h1 className="text-xl font-bold mb-4">Search Results for "{search}" in {cat}</h1>
       <ul>
         {results.length > 0 ? (

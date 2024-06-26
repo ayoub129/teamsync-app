@@ -23,7 +23,7 @@ const Search = () => {
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="py-2 px-12 pl-10 w-full border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
+            className="py-2 px-12 pl-10 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
           />
           <button type='submit'>
             <i className="fas fa-search absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-600 cursor-pointer"></i>

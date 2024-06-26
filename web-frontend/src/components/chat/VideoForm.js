@@ -61,7 +61,7 @@ const VideoForm = () => {
   };
 
   return (
-    <div className='md:ml-[19%] mx-8 p-8'>
+    <div className='md:ml-[19%] mx-4 md:mx-8 md:p-8'>
       <h2 className='text-3xl text-center mb-4'>Create a Video Chat Room</h2>
       <form onSubmit={handleSubmit}>
         <div>

@@ -152,7 +152,7 @@ const GroupForm = () => {
     };
 
     return (
-        <div className='my-12 md:my-6 mx-8 md:ml-[19%] md:w-[70%]'>
+        <div className='my-12 md:my-6 mx-4 md:mx-8 md:ml-[19%] md:w-[70%]'>
             {loading ? (
                 <Loader />
             ) : (

@@ -136,7 +136,7 @@ const ChannelForm = () => {
       {loading ? (
         <Loader /> 
       ) : (
-        <div className='my-6 md:my-12 mx-8 md:ml-[19%] md:w-[70%]'>
+        <div className='my-6 md:my-12 mx-4 md:mx-8 md:ml-[19%] md:w-[70%]'>
           <div className="ml-4">
             <div className='flex flex-col md:flex-row items-center justify-between'>
               <Input

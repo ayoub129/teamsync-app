@@ -46,8 +46,8 @@ const User = () => {
     }
 
     return (
-        <div className="md:ml-[19%] mx-8">
-            <div className="ml-4 p-8 bg-white rounded-lg shadow-md">
+        <div className="md:ml-[19%] mx-4 md:mx-8">
+            <div className="ml-4 md:p-8 bg-white rounded-lg shadow-md">
                 <div className="flex items-center space-x-4">
                     <img
                         src={profilePicture || 'https://via.placeholder.com/150'}

@@ -151,7 +151,7 @@ const Comments = () => {
         return comments
             .filter(comment => comment.parent_id === parentId)
             .map(comment => (
-                <div key={comment.id} className={`mb-4 p-8 bg-white shadow rounded-lg ${parentId ? 'ml-8 mt-4' : ''}`}>
+                <div key={comment.id} className={`mb-4 md:p-8 bg-white shadow rounded-lg ${parentId ? 'ml-4 md:ml-8 mt-4' : ''}`}>
                     <div className="flex items-center">
                         <img src={comment.userImage} alt={comment.user?.name} className="w-10 h-10 rounded-full mr-3" />
                         <div>

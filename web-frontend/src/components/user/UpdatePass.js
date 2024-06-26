@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import axios from '../../axios';
-import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdatePass = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -50,8 +47,8 @@ const UpdatePass = () => {
     };
 
     return (
-        <div className='md:ml-[19%] mx-8'>
-            <div className='ml-4 p-8 bg-white rounded-lg shadow-md'>
+        <div className='md:ml-[19%] mx-4 md:mx-8'>
+            <div className='ml-4 md:p-8 bg-white rounded-lg shadow-md'>
                 <h2 className='text-2xl font-bold mb-4'>Update Password</h2>
                 {error && <p className='text-red-500'>{error}</p>}
                 {success && <p className='text-green-500'>{success}</p>}

@@ -51,7 +51,7 @@ const SingleDiscussion = () => {
     const url = process.env.URL
 
     return (
-        <div className="mx-8 md:ml-[19%] p-8">
+        <div className="mx-4 md:mx-8 md:ml-[19%] md:p-8">
             <div className="bg-white shadow-lg rounded-lg p-6">
                 <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center">

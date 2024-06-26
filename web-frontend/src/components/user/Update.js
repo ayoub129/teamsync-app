@@ -57,7 +57,7 @@ const Update = () => {
   };
 
   return (
-    <div className='md:ml-[19%] mx-8 p-8'>
+    <div className='md:ml-[19%] mx-4 md:mx-8 md:p-8'>
       <h3 className='text-center font-bold text-[#0F2239] text-[1.5rem]'>Update Profile</h3>
       <form onSubmit={handleSubmit} className='space-y-4'>
         <Input

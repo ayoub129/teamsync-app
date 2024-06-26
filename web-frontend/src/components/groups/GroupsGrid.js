@@ -42,7 +42,7 @@ const GroupsGrid = ({ all = false }) => {
 
 
   return (
-    <div className='my-12 mx-8 ml-0 md:ml-[19%]'>
+    <div className='my-12 mx-4 md:mx-8 ml-0 md:ml-[19%]'>
       <div className='flex items-center justify-between'>
         <h2 className='text-[#0F2239] text-2xl font-bold ml-4'>
           {all ? 'All Groups' : 'Your Groups'}

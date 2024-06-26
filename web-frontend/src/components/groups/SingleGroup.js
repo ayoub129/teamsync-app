@@ -245,7 +245,7 @@ const SingleGroup = () => {
   };
 
   return (
-    <div className="relative mx-8 w-full md:ml-[19%] p-8">
+    <div className="relative mx-4 md:mx-8 w-full md:ml-[19%] md:p-8">
       <Filters onSearch={handleSearch}  />
       {loading ? (
         <Loader />
@@ -310,7 +310,9 @@ const SingleGroup = () => {
               </div>
             )}
           </div>
-          {!isSmallScreen && <GroupMembers groupId={id} />}
+          <div className="w-full md:col-span-1">
+           <GroupMembers groupId={id} />
+          </div>
         </div>
       )}
       {showDeleteGroupModal && (
