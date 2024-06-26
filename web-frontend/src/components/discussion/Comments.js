@@ -117,7 +117,7 @@ const Comments = () => {
         }
     };
 
-    const url = process.env.URL
+    const url = process.env.REACT_APP_API_URL
 
     const handleDeleteClick = (commentId) => {
         setCommentToDelete(commentId);

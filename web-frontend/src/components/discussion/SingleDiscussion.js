@@ -48,7 +48,7 @@ const SingleDiscussion = () => {
         return <div className='text-center'>No discussion found</div>;
     }
 
-    const url = process.env.URL
+    const url = process.env.REACT_APP_API_URL
 
     return (
         <div className="mx-4 md:mx-8 md:ml-[19%] md:p-8">

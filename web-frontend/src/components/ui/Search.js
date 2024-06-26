@@ -15,8 +15,8 @@ const Search = () => {
   };
 
   return (
-    <div className="flex items-center w-full">
-      <form onSubmit={handleSearch} className="flex w-full relative">
+    <div className="flex items-center ">
+      <form onSubmit={handleSearch} className="flex  relative">
         <div className="relative flex-grow">
           <input
             type="text"
@@ -28,6 +28,7 @@ const Search = () => {
           <button type='submit'>
             <i className="fas fa-search absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-600 cursor-pointer"></i>
           </button>
+        </div>
           <div className="absolute right-0 md:right-[-2rem] ml-2">
             <select
               value={searchCategory}
@@ -39,7 +40,6 @@ const Search = () => {
               <option value="channels">Channels</option>
             </select>
           </div>
-        </div>
       </form>
     </div>
   );
