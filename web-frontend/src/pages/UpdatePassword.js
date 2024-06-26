@@ -22,7 +22,7 @@ const UpdatePassword = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar toggleSidebar={toggleSidebar} active="profile" isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} toggleSidebar={toggleSidebar} active="profile" isSidebarOpen={isSidebarOpen} />
       <UpdatePass />
     </div>
   )

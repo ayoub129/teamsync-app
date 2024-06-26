@@ -29,7 +29,7 @@ const CreateVideo = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar toggleSidebar={toggleSidebar} active="video" isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} toggleSidebar={toggleSidebar} active="video" isSidebarOpen={isSidebarOpen} />
       <VideoForm />
     </div>
   )

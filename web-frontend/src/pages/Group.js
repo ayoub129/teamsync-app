@@ -22,7 +22,7 @@ const Group = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="groups" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} active="groups" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <SingleGroup />
     </div>
   );

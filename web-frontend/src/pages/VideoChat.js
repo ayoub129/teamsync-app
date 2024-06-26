@@ -23,7 +23,7 @@ const VideoChat = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="video" isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} active="video" isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Video />
     </div>
   );

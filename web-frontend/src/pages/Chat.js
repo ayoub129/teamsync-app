@@ -109,7 +109,7 @@ const Chat = () => {
   return (
     <div className="min-h-screen">
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar toggleSidebar={toggleSidebar} active="chats" isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} toggleSidebar={toggleSidebar} active="chats" isSidebarOpen={isSidebarOpen} />
       <div className="ml-[19%] mx-8 p-8 flex">
         {loading ? (
           <div className="flex justify-center items-center w-full">

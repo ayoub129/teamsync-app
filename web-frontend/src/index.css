@@ -22,7 +22,7 @@
 .discussion-modal {
     position: relative;
     overflow-y: scroll;
-    width: 60%;
+    width: 75%;
     max-width: 800px;
     margin: auto;
     background: white;
@@ -33,9 +33,10 @@
     top: 50%;
   }
 
-  @media (min-width: 768px) {
+  @media(max-width: 768px) {
     .discussion-modal {
-      width: 75%;
+      width: 85%;
+      overflow-y: scroll;
     }
   }
   

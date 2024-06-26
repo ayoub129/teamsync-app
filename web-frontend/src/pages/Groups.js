@@ -25,7 +25,7 @@ const Groups = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="groups" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} active="groups" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <GroupsGrid all={admin === 1 && true} />
     </div>
   )

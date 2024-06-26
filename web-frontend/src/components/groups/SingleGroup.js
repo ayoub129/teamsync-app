@@ -32,7 +32,6 @@ const SingleGroup = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showSidebar, setShowSidebar] = useState(false); 
   const [deleting, setDeleting] = useState(false); 
   const [discussionToDelete, setDiscussionToDelete] = useState(null); 
   const [showDeleteGroupModal, setShowDeleteGroupModal] = useState(false); // State for group delete confirmation
@@ -245,18 +244,14 @@ const SingleGroup = () => {
     navigate(`/edit-group/${id}`);
   };
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
-
   return (
-    <div className="relative mx-8 md:ml-[19%] p-8">
+    <div className="relative mx-8 w-full md:ml-[19%] p-8">
       <Filters onSearch={handleSearch}  />
       {loading ? (
         <Loader />
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-          <div className="md:col-span-2">
+        <div className='md:grid md:grid-cols-3 gap-4'>
+          <div className="w-full md:col-span-2">
             {group && (
               <div className="bg-white shadow rounded-lg p-6 ">
                 <div className='flex items-center justify-between'>
@@ -317,20 +312,6 @@ const SingleGroup = () => {
           </div>
           {!isSmallScreen && <GroupMembers groupId={id} />}
         </div>
-      )}
-      {isSmallScreen && (
-        <>
-          <Button handlePress={toggleSidebar} color="bg-sky-500">Show Members</Button>
-          {showSidebar && (
-            <div className="fixed inset-0 flex items-center justify-center z-50">
-              <div className="bg-black opacity-50 absolute inset-0" onClick={toggleSidebar}></div>
-              <div className="bg-white p-8 rounded shadow-lg z-10">
-                <GroupMembers groupId={id} />
-                <Button handlePress={toggleSidebar} color="bg-red-500 mt-4">Close</Button>
-              </div>
-            </div>
-          )}
-        </>
       )}
       {showDeleteGroupModal && (
         <ConfirmationModal 

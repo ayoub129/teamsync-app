@@ -30,7 +30,7 @@ const CreateChannel = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar toggleSidebar={toggleSidebar} active="channels" isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} toggleSidebar={toggleSidebar} active="channels" isSidebarOpen={isSidebarOpen} />
       <ChannelForm />
     </div>
   )

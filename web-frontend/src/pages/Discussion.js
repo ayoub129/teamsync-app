@@ -23,7 +23,7 @@ const Discussion = () => {
   return (
     <div className='min-h-screen'>
       <Header toggleSidebar={toggleSidebar} />
-      <SideBar active="dashboard" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <SideBar setIsSidebarOpen={setIsSidebarOpen} active="dashboard" toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <SingleDiscussion />
       <Comments />
     </div>
