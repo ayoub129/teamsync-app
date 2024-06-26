@@ -203,7 +203,7 @@ const GroupForm = () => {
                             error={errors.image}
                         />
                         <Button handlePress={handleGroupSubmission} type="submit" color="bg-blue-500 mt-5 md:mt-8">
-                            {submitting ? 'Submitting...' : id ? 'Update Group' : 'Create Group'}
+                            {submitting ? 'Creating...' : id ? 'Update Group' : 'Create Group'}
                         </Button>
                     </form>
                 </div>

@@ -36,8 +36,8 @@ class GroupController extends Controller
         $userId = Auth::id();
     
         $request->validate([
-            'name' => 'required|string|max:255|unique:groups',
-            'description' => 'required|string|max:255',
+            'name' => 'required|string|unique:groups',
+            'description' => 'required|string',
             'members' => 'required|array',
             'members.*' => 'exists:users,id',
             'image' => 'nullable|image|max:2048',
@@ -86,8 +86,8 @@ class GroupController extends Controller
         }
 
         $request->validate([
-            'name' => 'string|max:255|unique:groups,name,' . $id,
-            'description' => 'string|max:255',
+            'name' => 'string|unique:groups,name,' . $id,
+            'description' => 'string',
             'members' => 'array',
             'members.*' => 'exists:users,id',
             'image' => 'nullable|image|max:2048',

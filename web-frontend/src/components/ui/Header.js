@@ -20,7 +20,12 @@ const Header = ({ toggleSidebar }) => {
             },
           });
 
-          setUserImage(response.data.image);
+          if (response.data.error) {
+            console.log('No image found for the user');
+          } else {
+            setUserImage(response.data.image);
+          }
+
         } catch (error) {
           console.error('Error fetching user image', error);
         }
@@ -56,7 +61,7 @@ const Header = ({ toggleSidebar }) => {
       <button onClick={toggleSidebar} className="block md:hidden text-2xl mr-4">
         <i className="fas fa-bars"></i>
       </button>
-      <h1 className='w-full flex'>
+      <h1 className='w-[65%] md:w-full flex'>
         <Search />
       </h1>
       <div className='flex items-center'>

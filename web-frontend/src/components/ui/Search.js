@@ -30,7 +30,7 @@ const Search = () => {
                         <i className="fas fa-search absolute top-[12px] left-[12px] text-gray-600 cursor-pointer"></i>
                     </button>
                 </div>
-                <div className="absolute right-[-2rem] ml-2">
+                <div className="absolute right-0 md:right-[-2rem] ml-2">
                     <select
                         value={searchCategory}
                         onChange={(e) => setSearchCategory(e.target.value)}

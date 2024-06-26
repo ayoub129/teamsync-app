@@ -32,7 +32,7 @@ resource "aws_instance" "jenkins" {
   ami           = "ami-0bb84b8ffd87024d8"
   instance_type = "t2.large"
 
-  key_name = "amazon_key"
+  key_name = "amazon_keya"
 
   security_groups = [aws_security_group.jenkins_sg.name]
 

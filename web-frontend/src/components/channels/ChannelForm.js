@@ -190,7 +190,7 @@ const ChannelForm = () => {
               error={errors.channelDescription}
             />
             <Button handlePress={handleSubmit} color="bg-blue-500 mt-8">
-              {submitting ? 'Submitting...' : id ? 'Update Channel' : 'Create Channel'}
+              {submitting ? 'Creating...' : id ? 'Update Channel' : 'Create Channel'}
             </Button>
           </div>
           <Toast toasts={toasts} />

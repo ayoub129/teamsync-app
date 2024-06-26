@@ -1,5 +1,6 @@
 /.terraform
 .terraform.lock.hcl
+amazon_keya.pem
 amazon_key.pem
 terraform.tfstate
 terraform.tfstate.backup
