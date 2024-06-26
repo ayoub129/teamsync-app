@@ -27,7 +27,6 @@ import CreateVideo from './pages/CreateVideo';
 import EditChannel from './pages/EditChannel';
 import EditGroup from './pages/EditGroup';
 import VideoChat from './pages/VideoChat';
-import Ch from './pages/Ch'
 
 const App = () => {
   return (
@@ -35,7 +34,6 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/ch" element={<Ch />} />
           <Route path="/edit-channel/:id" element={<EditChannel />} />
           <Route path="/create-channel" element={<CreateChannel />} />
           <Route path="/channels" element={<Channels />} />

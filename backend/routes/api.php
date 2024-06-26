@@ -60,8 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
 
     /* Routes for messages */
-    Route::post('/messages', [MessageController::class, 'sendMessage']);
-    Route::get('/messages', [MessageController::class, 'getMessages']);
+    Route::get('/messages/{id}', [MessageController::class, 'index']);
+    Route::post('/send-message', [MessageController::class, 'store']);
 
     /* Routes for files */
     Route::post('/files/upload', [FileController::class, 'upload']);

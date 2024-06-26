@@ -11,7 +11,7 @@ const FriendsList = ({ friends, groups, onSelectFriendOrGroup }) => {
           onClick={() => onSelectFriendOrGroup(friend)}
         >
           <div className="flex items-center">
-            <img src={friend.image} alt={friend.name} className="w-10 h-10 rounded-full mr-3" />
+            <img src={friend.image ? friend.image : "https://via.placeholder.com/40"} alt={friend.name} className="w-10 h-10 rounded-full mr-3" />
             <span>{friend.name}</span>
           </div>
         </div>
