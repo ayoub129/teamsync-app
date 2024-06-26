@@ -11,7 +11,7 @@ class MessageController extends Controller
     public function index($id)
     {
         $userId = auth()->id();
-        $messages = Message::where(function ($query) use ($userId, $id) {
+        $message = Message::where(function ($query) use ($userId, $id) {
                                 $query->where('user_id', $userId)
                                       ->where('receiver_id', $id);
                             })
@@ -23,7 +23,7 @@ class MessageController extends Controller
                             ->orderBy('created_at', 'asc')
                             ->get();
 
-        return response()->json(['messages' => $messages]);
+        return response()->json(['message' => $message]);
     }
 
     public function store(Request $request)
@@ -31,14 +31,14 @@ class MessageController extends Controller
         $request->validate([
             'receiver_id' => 'nullable|exists:users,id',
             'group_id' => 'nullable|exists:groups,id',
-            'messages' => 'required|string',
+            'message' => 'required|string',
         ]);
 
         $message = Message::create([
             'user_id' => auth()->id(),
             'receiver_id' => $request->receiver_id,
             'group_id' => $request->group_id,
-            'messages' => $request->messages,
+            'message' => $request->message,
         ]);
 
         broadcast(new MessageSent($message))->toOthers();

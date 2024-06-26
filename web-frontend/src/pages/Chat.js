@@ -55,7 +55,7 @@ const Chat = () => {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });
-          setMessages(response.data.messages);
+          setMessages(response.data.message);
         } catch (error) {
           console.error('Error fetching messages:', error.response ? error.response.data : error.message);
         }
@@ -81,7 +81,7 @@ const Chat = () => {
 
       echo.channel(channelName)
           .listen('MessageSent', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data.messages]);
+            setMessages((prevMessages) => [...prevMessages, data.message]);
           });
 
       return () => {
@@ -96,13 +96,13 @@ const Chat = () => {
     try {
       const response = await axios.post('/send-message', {
         receiver_id: selectedFriendOrGroup.id,
-        messages: newMessage,
+        message: newMessage,
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setMessages((prevMessages) => [...prevMessages, response.data.messages]);
+      setMessages((prevMessages) => [...prevMessages, response.data.message]);
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
