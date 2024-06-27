@@ -64,8 +64,6 @@ services:
     container_name: react-app
     depends_on:
       - php
-    ports:
-      - "80:80"
 
   phpmyadmin:
     image: osixia/phpldapadmin:latest
