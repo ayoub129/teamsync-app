@@ -1,6 +1,5 @@
 version: '3.8'
 
-
 services:
   php:
     image: ayoubberouijil/nanachat-backend:latest
@@ -15,8 +14,6 @@ services:
     working_dir: /var/www
     volumes:
       - ./backend:/var/www
-    ports:
-      - "8000:8000"
     depends_on:
       - mysqldb
       - openldap
@@ -63,8 +60,6 @@ services:
       context: ./web-frontend
       dockerfile: Dockerfile
     container_name: react-app
-    ports:
-      - "80:80"
     depends_on:
       - php
 
@@ -77,6 +72,18 @@ services:
       - "6443:443"
     depends_on:
       - openldap
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+    depends_on:
+      - php
+      - react
 
 volumes:
   db-data: ~
