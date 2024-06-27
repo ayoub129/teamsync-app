@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://34.232.72.99:8000/api',
+  baseURL: process.env.REACT_APP_API_URL || 'https://nanachat.online/api',
 });
 
 export default instance;
